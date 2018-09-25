@@ -14,7 +14,6 @@
     <orderEntry type="library" name="commons-compress-1.18" level="project" />
     <orderEntry type="library" name="poi-ooxml-schemas-4.0.0" level="project" />
     <orderEntry type="library" name="j-text-utils-0.3.3" level="project" />
-    <orderEntry type="library" name="commons-lang3-3.8.1" level="project" />
     <orderEntry type="library" name="commons-lang-1.0.1" level="project" />
   </component>
 </module>
