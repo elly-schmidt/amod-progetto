@@ -90,9 +90,29 @@ public class BranchAndBoundAlgorithm {
         return computeFeasibleSchedule();
     }
 
-    private boolean checkPruningCondition() {
-        // TODO Check pruning condition
+    /**
+     * Check if the subtree rooted in node j is to be pruned.
+     *
+     * If releaseTime of job j >= max{ t, releaseTime of job i } + processingTime of job i for each i in otherNodes
+     * the job i can be done entirely before the job j is released.
+     * Therefore the subtree rooted in j can be pruned because it does not lead to an optimal solution.
+     * @param j
+     * @return true if the input subtree is to be pruned
+     */
+    //TODO Compute or add t
+    private boolean checkPruningCondition(Integer j) {
+        int releaseTime_j;
+        ArrayList<Job> jobs;
+
+//        jobs = instance.getJobs();
+//        for (Job job : jobs) {
+//            if (job.getId() == j) {
+//                releaseTime_j = job.getReleaseTime();
+//            }
+//        }
+
         return false;
+
     }
 
     class JobComparator implements Comparator<Job> {
