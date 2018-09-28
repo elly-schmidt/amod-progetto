@@ -5,6 +5,7 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.PrintStream;
 import java.util.ArrayList;
+import java.util.HashMap;
 
 
 public class Instance {
@@ -14,13 +15,13 @@ public class Instance {
     private int processingTimeMax;
     private String name;    // The name of the instance
 
-    private ArrayList<Job> jobs;
+    private HashMap<Integer, Job> jobs;
 
     public Instance() {
         this.numberOfJobs = 0;
         this.processingTimeMin = 0;
         this.processingTimeMax = 0;
-        this.jobs = new ArrayList<>();
+        this.jobs = new HashMap<>();
     }
 
     /* Getters and setters */
@@ -49,12 +50,12 @@ public class Instance {
         this.processingTimeMax = processingTimeMax;
     }
 
-    public ArrayList<Job> getJobs() {
+    public HashMap<Integer, Job> getJobs() {
         return this.jobs;
     }
 
     public void addJob(Job job) {
-        this.jobs.add(job);
+        this.jobs.put(job.getId(), job);
     }
 
     public void removeJob(Job job) {
@@ -106,7 +107,7 @@ public class Instance {
             Object[][] data = new Object[this.numberOfJobs][3];
             int i = 0;
 
-            for (Job j : this.jobs) {
+            for (Job j : this.jobs.values()) {
                 data[i][0] = j.getId();
                 data[i][1] = j.getProcessingTime();
                 data[i][2] = j.getReleaseTime();

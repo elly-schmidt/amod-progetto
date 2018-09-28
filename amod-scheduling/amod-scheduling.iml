@@ -15,5 +15,7 @@
     <orderEntry type="library" name="poi-ooxml-schemas-4.0.0" level="project" />
     <orderEntry type="library" name="j-text-utils-0.3.3" level="project" />
     <orderEntry type="library" name="commons-lang-1.0.1" level="project" />
+    <orderEntry type="library" name="cloning-1.8.5" level="project" />
+    <orderEntry type="library" name="objenesis-tck-2.6" level="project" />
   </component>
 </module>

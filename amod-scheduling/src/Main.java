@@ -8,9 +8,14 @@ public class Main {
         Dataset dataset = new Dataset();
         dataset.buildDatasetFromXlsxFile("dataset\\instances.xlsx");
 
-        /* Run the scheduling algorithm on dataset*/
-
-
+        /* Run the scheduling algorithm on dataset */
         /* Print results */
+        for (Instance instance : dataset.getInstances()) {
+            System.out.println("****************************** Instance " + instance.getName() + " ******************************");
+            new BranchAndBoundAlgorithm(instance);
+            System.out.println("*************************************************************************************************");
+            System.out.println();
+            System.out.println();
+        }
     }
 }

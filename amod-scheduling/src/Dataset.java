@@ -104,6 +104,7 @@ public class Dataset {
                                     break;
                                 case PROCESSING_TIME_VALUE:
                                     job.setProcessingTime((int) currentCell.getNumericCellValue());
+                                    job.setRemainingTime((int) currentCell.getNumericCellValue());
                                     currentState = ParserState.RELEASE_TIME_VALUE;
                                     break;
                                 case RELEASE_TIME_VALUE:
@@ -133,5 +134,9 @@ public class Dataset {
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    public ArrayList<Instance> getInstances() {
+        return instances;
     }
 }
