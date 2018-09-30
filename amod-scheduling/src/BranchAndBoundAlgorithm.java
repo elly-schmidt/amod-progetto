@@ -51,7 +51,7 @@ public class BranchAndBoundAlgorithm {
             partialSequence.push(jobId);
 
             // Check pruning condition
-            if (checkPruningCondition()) {
+            if (checkPruningCondition(jobId, remainingJobs)) {
                 // This branch should not be explored
                 break;
             }
@@ -97,22 +97,23 @@ public class BranchAndBoundAlgorithm {
      * the job i can be done entirely before the job j is released.
      * Therefore the subtree rooted in j can be pruned because it does not lead to an optimal solution.
      * @param j
+     * @param remainingJobs
      * @return true if the input subtree is to be pruned
      */
-    //TODO Compute or add t
-    private boolean checkPruningCondition(Integer j) {
+    //TODO Compute t and and add to if condition
+    private boolean checkPruningCondition(Integer j, LinkedList<Integer> remainingJobs) {
         int releaseTime_j;
-        ArrayList<Job> jobs;
 
-//        jobs = instance.getJobs();
-//        for (Job job : jobs) {
-//            if (job.getId() == j) {
-//                releaseTime_j = job.getReleaseTime();
-//            }
-//        }
+        releaseTime_j = jobs.get(j).getReleaseTime();
+        // TODO basta accedere così con il get(j) oppure devo accedere in base all'id del job ?
+
+        for (Integer i : remainingJobs) {
+            Job job_i = jobs.get(i);
+            if (releaseTime_j >= job_i.getReleaseTime() + job_i.getProcessingTime())
+                return true;
+        }
 
         return false;
-
     }
 
     class JobComparator implements Comparator<Job> {
