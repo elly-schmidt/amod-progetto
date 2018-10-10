@@ -1,0 +1,10 @@
+reset;
+
+# carica il modello
+model scheduling.mod;
+
+option solver './cplex';
+
+solve;
+
+display completionTime;
