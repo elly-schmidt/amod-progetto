@@ -1,9 +1,10 @@
 reset;
 
-# carica il modello
+# load the model
 model scheduling.mod;
 
 option solver './cplex';
+# or gurobi?
 
 solve;
 

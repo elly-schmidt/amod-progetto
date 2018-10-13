@@ -6,7 +6,7 @@
 # --------------------------------------------- #
 # AMOD project september 2018                   #
 # Carmine Scarpitta,                            #
-# Davide Romano Tranzocchi                      #
+# Davide Romano Tranzocchi,                     #
 # Elly Schmidt                                  #
 #################################################
 

@@ -7,14 +7,12 @@ import java.io.PrintStream;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-
 public class Instance {
 
     private int numberOfJobs;
     private int processingTimeMin;
     private int processingTimeMax;
     private String name;    // The name of the instance
-
     private HashMap<Integer, Job> jobs;
 
     public Instance() {

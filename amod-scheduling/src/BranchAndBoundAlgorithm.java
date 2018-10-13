@@ -19,11 +19,12 @@ public class BranchAndBoundAlgorithm {
         Schedule optimalSchedule = computeUpperBound();
         this.upperBound = optimalSchedule.getCompletionTimeSum();
 
+        // List of nodes in the current path from the root of the BnB tree. This path represents a candidate solution.
         LinkedList<Integer> partialSequence = new LinkedList<>();
 
         LinkedList<Integer> otherNodes = new LinkedList<>();
         for (Job j : this.jobs.values()) {
-            otherNodes.add(j.getId());
+            otherNodes.add(j.getId()); // initially all jobs are in otherNodes
         }
 
         // Execute Branch And Bound Algorithm
@@ -44,20 +45,18 @@ public class BranchAndBoundAlgorithm {
         Schedule schedule = null;
         Schedule optimalSchedule = null;
 
-
         while (remainingJobs.size() > 0) {
             // Go down the tree
             int jobId = remainingJobs.pop();
             partialSequence.push(jobId);
 
             // Check pruning condition
-            if (checkPruningCondition(jobId, remainingJobs)) {
+            if (checkPruningCondition(jobId, partialSequence, remainingJobs)) {
                 // This branch should not be explored
-                break;
+                break; //TODO continue instead of break here?
             }
 
             // Explore this branch
-
 
             // Make preemption assumption and compute a lower bound
             schedule = computeLowerBound(new LinkedList<>(partialSequence));
@@ -91,42 +90,54 @@ public class BranchAndBoundAlgorithm {
     }
 
     /**
-     * Check if the subtree rooted in node j is to be pruned.
+     * Check if the subtree rooted in node j has to be pruned.
      *
-     * If releaseTime of job j >= max{ t, releaseTime of job i } + processingTime of job i for each i in otherNodes
-     * the job i can be done entirely before the job j is released.
+     * If releaseTime of job j >= max{ t, releaseTime of job i } + processingTime of job i for each i in otherNodes,
+     * then the job i can be done entirely before the job j is released.
      * Therefore the subtree rooted in j can be pruned because it does not lead to an optimal solution.
-     * @param j
+     * The value t is the time of completion of the sequence of jobs leading to job j.
+     * @param jobId id of job j
+     * @param sequence
      * @param remainingJobs
-     * @return true if the input subtree is to be pruned
+     * @return true if the input subtree has to be pruned
      */
-    //TODO Compute t and and add to if condition
-    private boolean checkPruningCondition(Integer j, LinkedList<Integer> remainingJobs) {
-        int releaseTime_j;
+    private boolean checkPruningCondition(int jobId, LinkedList<Integer> sequence, LinkedList<Integer> remainingJobs) {
+        int releaseTime_j = 0, releaseTime_i = 0, processingTime_i = 0;
 
-        releaseTime_j = jobs.get(j).getReleaseTime();
-        // TODO basta accedere così con il get(j) oppure devo accedere in base all'id del job ?
+        for (Job k : this.jobs.values()) {
+            if (k.getId() == jobId)
+                releaseTime_j = k.getReleaseTime();
+        }
+
+        //TODO compute completion time t of sequence
 
         for (Integer i : remainingJobs) {
-            Job job_i = jobs.get(i);
-            if (releaseTime_j >= job_i.getReleaseTime() + job_i.getProcessingTime())
+            for (Job k : this.jobs.values()) {
+                if (k.getId() == i)
+                    releaseTime_i = k.getReleaseTime();
+                    processingTime_i = k.getProcessingTime();
+            }
+
+            if (releaseTime_j >= releaseTime_i + processingTime_i) // pruning condition
                 return true;
         }
 
         return false;
     }
 
+    /**
+     * If jobs j1 and j2 have the same release time, order by processing time. Otherwise order by release time.
+     */
     class JobComparator implements Comparator<Job> {
 
         public int compare(Job j1, Job j2) {
-            if (Integer.compare(j1.getReleaseTime(), j2.getReleaseTime()) == 0) {
+            if (j1.getReleaseTime() == j2.getReleaseTime()) {
                 return Integer.compare(j1.getProcessingTime(), j2.getProcessingTime());
             } else {
                 return Integer.compare(j1.getReleaseTime(), j2.getReleaseTime());
             }
         }
     }
-
 
 
     //private Schedule schedule = new Schedule();
@@ -150,7 +161,7 @@ public class BranchAndBoundAlgorithm {
 
         // Schedule other jobs with a preemptive policy
 
-        Integer nextRelease = Integer.MAX_VALUE;
+        int nextRelease = Integer.MAX_VALUE;
 
         Set<Job> releasedJobs = new HashSet<>();
 
@@ -351,5 +362,4 @@ public class BranchAndBoundAlgorithm {
             }
         }
     }
-
 }
