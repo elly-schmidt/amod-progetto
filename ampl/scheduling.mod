@@ -4,7 +4,7 @@
 # to minimize the sum of completion times       #
 #                                               #
 # --------------------------------------------- #
-# AMOD project september 2018                   #
+# AMOD project 				                    #
 # Carmine Scarpitta,                            #
 # Davide Romano Tranzocchi,                     #
 # Elly Schmidt                                  #
@@ -12,12 +12,7 @@
 
 ## ----------------------------------------------
 ## SETS
-set jobs; # := 1..n ;
-
-#TODO read dataset
-#Scusate che non ho fatto piu' ancora :(
-#table jobs IN "ODBC" "instances.xlsx":
-#  jobs <- [jobs], processing t, release t;
+set jobs; #:= 1..n;
 
 ## ----------------------------------------------
 ## PARAMETERS

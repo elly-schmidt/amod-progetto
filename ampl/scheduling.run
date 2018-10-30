@@ -1,0 +1,26 @@
+################  SCHEDULING  ###################
+# on a single machine                           #
+# with release dates                            #
+# to minimize the sum of completion times       #
+#                                               #
+# --------------------------------------------- #
+# AMOD project 				                    #
+# Carmine Scarpitta,                            #
+# Davide Romano Tranzocchi,                     #
+# Elly Schmidt                                  #
+#################################################
+
+reset;
+
+model scheduling.mod;
+
+table jobs IN "ODBC" "instance.xlsx": 
+	jobs <- [jobs], p, r;
+
+read table jobs;
+
+option solver cplex; # or gurobi?
+
+solve;
+
+display completionTime;
