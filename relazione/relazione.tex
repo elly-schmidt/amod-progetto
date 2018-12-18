@@ -1,0 +1,95 @@
+\documentclass[12pt,a4paper]{report}
+
+\usepackage{graphicx}
+\usepackage[utf8]{inputenc}
+\usepackage[italian]{babel}
+\usepackage{tikz}
+\usetikzlibrary{trees}
+%\usepackage{algpseudocode}
+%\usepackage{algorithm}
+%\usepackage{algorithmic}
+\usepackage{amsmath,amsthm}
+%\usepackage{mathtools}
+\usepackage{caption}
+\usepackage{comment}
+
+%\algtext*{EndWhile}
+%\algtext*{EndIf}
+
+\author{
+	\textbf{Carmine Scarpitta}\\
+	\text{email}\\
+	\text{matricola}
+	\and
+	\textbf{Elly Schmidt}\\
+	\text{email}\\
+	\text{matricola}
+	\and
+	\textbf{Davide Romano Tranzocchi}\\
+	\text{email}\\
+	\text{matricola}
+}
+
+\title{\Huge \textbf{Progetto\\
+	\vspace{1mm}
+	Algoritmi e modelli per l'ottimizzazione discreta \\
+	\vspace{5mm}
+	A.A. 2017/2018}\\
+	\bigskip
+	{\includegraphics[scale=0.6]{logoTV.png}}
+}
+
+\date{}
+
+\begin{document}
+	
+\maketitle
+
+\begin{center}
+	\Huge \textbf{Tipologia A\\
+	\vspace{5mm}
+	Progetto 3\\
+	\vspace{70mm}
+	Scheduling single-machine: disegno, implementazione e test di uno schema di branch-and-bound combinatorio}
+\end{center}
+
+\tableofcontents
+
+\chapter{Relazione sull'implementazione in Java}
+\section{Introduzione}
+	In questo documento saranno presentati gli aspetti salienti dell'applicazione sviluppata per risolvere il problema di scheduling su macchina singola impiegando un algoritmo di branch-and-bound combinatorio.
+		
+	Il problema considerato è $1 | r_j | \sum_{j} C_j$.
+
+\section{Caratteristiche teoriche e idee algoritmiche implementate}
+\subsection{Algoritmo di branch-and-bound}
+\newpage
+L'algoritmo di branch-and-bound da noi implementato si articola in tre fasi:
+\begin{enumerate}
+	\item Inizializzazione
+	\begin{enumerate}
+		\item Calcolo di un upper bound sul valore della funzione obiettivo da una schedula ammissibile
+		\item Inizializzazione sequenze parziali ‘partialSequence’ e ‘remainingJobs’
+		\item Inizialmente tutti i nodi cioè i job sono in ‘remainingJobs’
+	\end{enumerate}
+	\item Primo passo di ramificazione
+	\begin{enumerate}
+		\item FOR Nodo = 1 .. n DO
+		\begin{enumerate}
+			\item Seleziona il nodo j-esimo secondo un criterio e aggiungilo a ‘partialSequence’
+			\item Calcola un lower bound sulla soluzione ottima per quel nodo calcolando una schedula con prelazione
+			\item Se LB < UB continue
+		\end{enumerate}
+	\end{enumerate}
+	\item Passi successivi di ramificazione
+	
+	%complessità dell'algoritmo
+\end{enumerate}
+
+\section{Documentazione del codice}
+	Per prima cosa l'applicazione crea un dataset a partire dalle istanze del problema di scheduling fornite in input come file excel. A questo punto si applica l'algoritmo di branch-and-bound a ciascuna istanza per ottenere la soluzione del problema di scheduling corrispondente.
+\section{Schema delle classi}
+\section{Risultati sperimentali}
+\section{Analisi sperimentale}
+\section{Conclusioni}
+\end{document}

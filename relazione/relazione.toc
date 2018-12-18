@@ -1,0 +1,11 @@
+\select@language {italian}
+\select@language {italian}
+\contentsline {chapter}{\numberline {1}Relazione sull'implementazione in Java}{3}
+\contentsline {section}{\numberline {1.1}Introduzione}{3}
+\contentsline {section}{\numberline {1.2}Caratteristiche teoriche e idee algoritmiche implementate}{3}
+\contentsline {subsection}{\numberline {1.2.1}Algoritmo di branch-and-bound}{3}
+\contentsline {section}{\numberline {1.3}Documentazione del codice}{4}
+\contentsline {section}{\numberline {1.4}Schema delle classi}{4}
+\contentsline {section}{\numberline {1.5}Risultati sperimentali}{4}
+\contentsline {section}{\numberline {1.6}Analisi sperimentale}{4}
+\contentsline {section}{\numberline {1.7}Conclusioni}{4}
