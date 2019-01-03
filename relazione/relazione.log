@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.19 (MiKTeX 2.9.6840 64-bit) (preloaded format=pdflatex 2018.12.28)  2 JAN 2019 17:58
+This is pdfTeX, Version 3.14159265-2.6-1.40.19 (MiKTeX 2.9.6840 64-bit) (preloaded format=pdflatex 2018.12.28)  3 JAN 2019 13:02
 entering extended mode
 **./relazione.tex
 (relazione.tex
@@ -508,18 +508,18 @@ y"
  Excluding comment 'comment') (relazione.aux)
 \openout1 = `relazione.aux'.
 
-LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 36.
-LaTeX Font Info:    ... okay on input line 36.
-LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 36.
-LaTeX Font Info:    ... okay on input line 36.
-LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 36.
-LaTeX Font Info:    ... okay on input line 36.
-LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 36.
-LaTeX Font Info:    ... okay on input line 36.
-LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 36.
-LaTeX Font Info:    ... okay on input line 36.
-LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 36.
-LaTeX Font Info:    ... okay on input line 36.
+LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 35.
+LaTeX Font Info:    ... okay on input line 35.
+LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 35.
+LaTeX Font Info:    ... okay on input line 35.
+LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 35.
+LaTeX Font Info:    ... okay on input line 35.
+LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 35.
+LaTeX Font Info:    ... okay on input line 35.
+LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 35.
+LaTeX Font Info:    ... okay on input line 35.
+LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 35.
+LaTeX Font Info:    ... okay on input line 35.
 
 ("C:\Users\david\AppData\Local\Programs\MiKTeX 2.9\tex\context\base\supp-pdf.mk
 ii"
@@ -599,8 +599,8 @@ Package grfext Info: Graphics extension search list:
 G,.JBIG2,.JB2,.eps]
 (grfext)             \AppendGraphicsExtensions on input line 456.
 )
-LaTeX Info: Redefining \it@ocap on input line 36.
-LaTeX Info: Redefining \it@ccap on input line 36.
+LaTeX Info: Redefining \it@ocap on input line 35.
+LaTeX Info: Redefining \it@ccap on input line 35.
 
 
 File italian.ldf warning: 
@@ -608,186 +608,44 @@ italian.ldf    With OT1 encoding guillemets are poorly faked
 italian.ldf    Use T1 encoding
 italian.ldf    or specify a font with command \CaporaliFrom
 italian.ldf    See the documentation concerning the babel-italian typesetting 
-italian.ldf    on input line 36.
+italian.ldf    on input line 35.
 
 ABD: EveryShipout initializing macros
 Package caption Info: Begin \AtBeginDocument code.
 Package caption Info: End \AtBeginDocument code.
  [1
 
-{C:/Users/david/AppData/Local/MiKTeX/2.9/pdftex/config/pdftex.map}] (relazione.
-toc)
-\tf@toc=\write5
-\openout5 = `relazione.toc'.
+{C:/Users/david/AppData/Local/MiKTeX/2.9/pdftex/config/pdftex.map}]
+LaTeX Font Info:    Try loading font information for OMS+cmr on input line 58.
 
-
-Overfull \hbox (5.06458pt too wide) in paragraph at lines 47--47
-[]\OT1/cmr/bx/n/14.4 Caratteristiche teo-ri-che e idee al-go-rit-mi-che im-
- []
-
-[2]
-<schema_classi.pdf, id=20, 557.08125pt x 257.96375pt>
-File: schema_classi.pdf Graphic file (type pdf)
-<use schema_classi.pdf>
-Package pdftex.def Info: schema_classi.pdf  used on input line 75.
-(pdftex.def)             Requested size: 334.25133pt x 154.77943pt.
-LaTeX Font Info:    Try loading font information for OMS+cmr on input line 81.
- ("C:\Users\david\AppData\Local\Programs\MiKTeX 2.9\tex\latex\base\omscmr.fd"
+("C:\Users\david\AppData\Local\Programs\MiKTeX 2.9\tex\latex\base\omscmr.fd"
 File: omscmr.fd 2014/09/29 v2.5h Standard LaTeX font definitions
 )
 LaTeX Font Info:    Font shape `OMS/cmr/m/n' in size <10> not available
-(Font)              Font shape `OMS/cmsy/m/n' tried instead on input line 81.
+(Font)              Font shape `OMS/cmsy/m/n' tried instead on input line 58.
 
-Overfull \hbox (278.09164pt too wide) in paragraph at lines 82--83
-[]\OT1/cmr/m/n/10 Istanza 2: $[][] \OML/cmm/m/it/10 C[] \OT1/cmr/m/n/10 = 15177
-$, sche-du-la ot-ti-ma $\OML/cmm/m/it/10  \OT1/cmr/m/n/10 = (29\OML/cmm/m/it/1
-0 ; \OT1/cmr/m/n/10 9\OML/cmm/m/it/10 ; \OT1/cmr/m/n/10 14\OML/cmm/m/it/10 ; \O
-T1/cmr/m/n/10 16\OML/cmm/m/it/10 ; \OT1/cmr/m/n/10 25\OML/cmm/m/it/10 ; \OT1/cm
-r/m/n/10 7\OML/cmm/m/it/10 ; \OT1/cmr/m/n/10 12\OML/cmm/m/it/10 ; \OT1/cmr/m/n/
-10 17\OML/cmm/m/it/10 ; \OT1/cmr/m/n/10 8\OML/cmm/m/it/10 ; \OT1/cmr/m/n/10 28\
-OML/cmm/m/it/10 ; \OT1/cmr/m/n/10 19\OML/cmm/m/it/10 ; \OT1/cmr/m/n/10 27\OML/c
-mm/m/it/10 ; \OT1/cmr/m/n/10 3\OML/cmm/m/it/10 ; \OT1/cmr/m/n/10 11\OML/cmm/m/i
-t/10 ; \OT1/cmr/m/n/10 26\OML/cmm/m/it/10 ; \OT1/cmr/m/n/10 30\OML/cmm/m/it/10 
-; \OT1/cmr/m/n/10 24\OML/cmm/m/it/10 ; \OT1/cmr/m/n/10 20\OML/cmm/m/it/10 ; \OT
-1/cmr/m/n/10 2\OML/cmm/m/it/10 ; \OT1/cmr/m/n/10 15\OML/cmm/m/it/10 ; \OT1/cmr/
-m/n/10 21\OML/cmm/m/it/10 ; \OT1/cmr/m/n/10 4\OML/cmm/m/it/10 ; \OT1/cmr/m/n/10
- 10\OML/cmm/m/it/10 ; \OT1/cmr/m/n/10 6\OML/cmm/m/it/10 ; \OT1/cmr/m/n/10 18\OM
-L/cmm/m/it/10 ; \OT1/cmr/m/n/10 5\OML/cmm/m/it/10 ; \OT1/cmr/m/n/10 23\OML/cmm/
-m/it/10 ; \OT1/cmr/m/n/10 13\OML/cmm/m/it/10 ; \OT1/cmr/m/n/10 1\OML/cmm/m/it/1
-0 ; \OT1/cmr/m/n/10 22)$ 
- []
-
-
-Overfull \hbox (273.09163pt too wide) in paragraph at lines 83--84
-[]\OT1/cmr/m/n/10 Istanza 3: $[][] \OML/cmm/m/it/10 C[] \OT1/cmr/m/n/10 = 9694$
-, sche-du-la ot-ti-ma $\OML/cmm/m/it/10  \OT1/cmr/m/n/10 = (7\OML/cmm/m/it/10 
-; \OT1/cmr/m/n/10 19\OML/cmm/m/it/10 ; \OT1/cmr/m/n/10 23\OML/cmm/m/it/10 ; \OT
-1/cmr/m/n/10 16\OML/cmm/m/it/10 ; \OT1/cmr/m/n/10 4\OML/cmm/m/it/10 ; \OT1/cmr/
-m/n/10 12\OML/cmm/m/it/10 ; \OT1/cmr/m/n/10 28\OML/cmm/m/it/10 ; \OT1/cmr/m/n/1
-0 21\OML/cmm/m/it/10 ; \OT1/cmr/m/n/10 9\OML/cmm/m/it/10 ; \OT1/cmr/m/n/10 26\O
-ML/cmm/m/it/10 ; \OT1/cmr/m/n/10 11\OML/cmm/m/it/10 ; \OT1/cmr/m/n/10 3\OML/cmm
-/m/it/10 ; \OT1/cmr/m/n/10 5\OML/cmm/m/it/10 ; \OT1/cmr/m/n/10 17\OML/cmm/m/it/
-10 ; \OT1/cmr/m/n/10 30\OML/cmm/m/it/10 ; \OT1/cmr/m/n/10 6\OML/cmm/m/it/10 ; \
-OT1/cmr/m/n/10 8\OML/cmm/m/it/10 ; \OT1/cmr/m/n/10 10\OML/cmm/m/it/10 ; \OT1/cm
-r/m/n/10 24\OML/cmm/m/it/10 ; \OT1/cmr/m/n/10 2\OML/cmm/m/it/10 ; \OT1/cmr/m/n/
-10 22\OML/cmm/m/it/10 ; \OT1/cmr/m/n/10 13\OML/cmm/m/it/10 ; \OT1/cmr/m/n/10 15
-\OML/cmm/m/it/10 ; \OT1/cmr/m/n/10 27\OML/cmm/m/it/10 ; \OT1/cmr/m/n/10 29\OML/
-cmm/m/it/10 ; \OT1/cmr/m/n/10 18\OML/cmm/m/it/10 ; \OT1/cmr/m/n/10 14\OML/cmm/m
-/it/10 ; \OT1/cmr/m/n/10 25\OML/cmm/m/it/10 ; \OT1/cmr/m/n/10 20\OML/cmm/m/it/1
-0 ; \OT1/cmr/m/n/10 1)$ 
- []
-
-
-Overfull \hbox (422.53607pt too wide) in paragraph at lines 84--85
-[]\OT1/cmr/m/n/10 Istanza 4: $[][] \OML/cmm/m/it/10 C[] \OT1/cmr/m/n/10 = 32688
-$, sche-du-la ot-ti-ma $\OML/cmm/m/it/10  \OT1/cmr/m/n/10 = (35\OML/cmm/m/it/1
-0 ; \OT1/cmr/m/n/10 14\OML/cmm/m/it/10 ; \OT1/cmr/m/n/10 1\OML/cmm/m/it/10 ; \O
-T1/cmr/m/n/10 33\OML/cmm/m/it/10 ; \OT1/cmr/m/n/10 8\OML/cmm/m/it/10 ; \OT1/cmr
-/m/n/10 38\OML/cmm/m/it/10 ; \OT1/cmr/m/n/10 40\OML/cmm/m/it/10 ; \OT1/cmr/m/n/
-10 6\OML/cmm/m/it/10 ; \OT1/cmr/m/n/10 30\OML/cmm/m/it/10 ; \OT1/cmr/m/n/10 23\
-OML/cmm/m/it/10 ; \OT1/cmr/m/n/10 11\OML/cmm/m/it/10 ; \OT1/cmr/m/n/10 32\OML/c
-mm/m/it/10 ; \OT1/cmr/m/n/10 13\OML/cmm/m/it/10 ; \OT1/cmr/m/n/10 21\OML/cmm/m/
-it/10 ; \OT1/cmr/m/n/10 12\OML/cmm/m/it/10 ; \OT1/cmr/m/n/10 17\OML/cmm/m/it/10
- ; \OT1/cmr/m/n/10 2\OML/cmm/m/it/10 ; \OT1/cmr/m/n/10 28\OML/cmm/m/it/10 ; \OT
-1/cmr/m/n/10 34\OML/cmm/m/it/10 ; \OT1/cmr/m/n/10 29\OML/cmm/m/it/10 ; \OT1/cmr
-/m/n/10 16\OML/cmm/m/it/10 ; \OT1/cmr/m/n/10 18\OML/cmm/m/it/10 ; \OT1/cmr/m/n/
-10 15\OML/cmm/m/it/10 ; \OT1/cmr/m/n/10 10\OML/cmm/m/it/10 ; \OT1/cmr/m/n/10 24
-\OML/cmm/m/it/10 ; \OT1/cmr/m/n/10 5\OML/cmm/m/it/10 ; \OT1/cmr/m/n/10 20\OML/c
-mm/m/it/10 ; \OT1/cmr/m/n/10 3\OML/cmm/m/it/10 ; \OT1/cmr/m/n/10 39\OML/cmm/m/i
-t/10 ; \OT1/cmr/m/n/10 22\OML/cmm/m/it/10 ; \OT1/cmr/m/n/10 36\OML/cmm/m/it/10 
-; \OT1/cmr/m/n/10 37\OML/cmm/m/it/10 ; \OT1/cmr/m/n/10 31\OML/cmm/m/it/10 ; \OT
-1/cmr/m/n/10 27\OML/cmm/m/it/10 ; \OT1/cmr/m/n/10 19\OML/cmm/m/it/10 ; \OT1/cmr
-/m/n/10 25\OML/cmm/m/it/10 ; \OT1/cmr/m/n/10 4\OML/cmm/m/it/10 ; \OT1/cmr/m/n/1
-0 7\OML/cmm/m/it/10 ; \OT1/cmr/m/n/10 26\OML/cmm/m/it/10 ; \OT1/cmr/m/n/10 9)$ 
-
- []
-
-
-Overfull \hbox (422.53607pt too wide) in paragraph at lines 85--86
-[]\OT1/cmr/m/n/10 Istanza 5: $[][] \OML/cmm/m/it/10 C[] \OT1/cmr/m/n/10 = 16236
-$, sche-du-la ot-ti-ma $\OML/cmm/m/it/10  \OT1/cmr/m/n/10 = (3\OML/cmm/m/it/10
- ; \OT1/cmr/m/n/10 30\OML/cmm/m/it/10 ; \OT1/cmr/m/n/10 11\OML/cmm/m/it/10 ; \O
-T1/cmr/m/n/10 25\OML/cmm/m/it/10 ; \OT1/cmr/m/n/10 38\OML/cmm/m/it/10 ; \OT1/cm
-r/m/n/10 13\OML/cmm/m/it/10 ; \OT1/cmr/m/n/10 31\OML/cmm/m/it/10 ; \OT1/cmr/m/n
-/10 26\OML/cmm/m/it/10 ; \OT1/cmr/m/n/10 39\OML/cmm/m/it/10 ; \OT1/cmr/m/n/10 1
-4\OML/cmm/m/it/10 ; \OT1/cmr/m/n/10 4\OML/cmm/m/it/10 ; \OT1/cmr/m/n/10 20\OML/
-cmm/m/it/10 ; \OT1/cmr/m/n/10 12\OML/cmm/m/it/10 ; \OT1/cmr/m/n/10 24\OML/cmm/m
-/it/10 ; \OT1/cmr/m/n/10 27\OML/cmm/m/it/10 ; \OT1/cmr/m/n/10 37\OML/cmm/m/it/1
-0 ; \OT1/cmr/m/n/10 23\OML/cmm/m/it/10 ; \OT1/cmr/m/n/10 6\OML/cmm/m/it/10 ; \O
-T1/cmr/m/n/10 29\OML/cmm/m/it/10 ; \OT1/cmr/m/n/10 9\OML/cmm/m/it/10 ; \OT1/cmr
-/m/n/10 32\OML/cmm/m/it/10 ; \OT1/cmr/m/n/10 33\OML/cmm/m/it/10 ; \OT1/cmr/m/n/
-10 15\OML/cmm/m/it/10 ; \OT1/cmr/m/n/10 1\OML/cmm/m/it/10 ; \OT1/cmr/m/n/10 10\
-OML/cmm/m/it/10 ; \OT1/cmr/m/n/10 8\OML/cmm/m/it/10 ; \OT1/cmr/m/n/10 5\OML/cmm
-/m/it/10 ; \OT1/cmr/m/n/10 21\OML/cmm/m/it/10 ; \OT1/cmr/m/n/10 16\OML/cmm/m/it
-/10 ; \OT1/cmr/m/n/10 22\OML/cmm/m/it/10 ; \OT1/cmr/m/n/10 19\OML/cmm/m/it/10 ;
- \OT1/cmr/m/n/10 18\OML/cmm/m/it/10 ; \OT1/cmr/m/n/10 36\OML/cmm/m/it/10 ; \OT1
-/cmr/m/n/10 40\OML/cmm/m/it/10 ; \OT1/cmr/m/n/10 2\OML/cmm/m/it/10 ; \OT1/cmr/m
-/n/10 17\OML/cmm/m/it/10 ; \OT1/cmr/m/n/10 28\OML/cmm/m/it/10 ; \OT1/cmr/m/n/10
- 34\OML/cmm/m/it/10 ; \OT1/cmr/m/n/10 7\OML/cmm/m/it/10 ; \OT1/cmr/m/n/10 35)$ 
-
- []
-
-
-Overfull \hbox (711.42493pt too wide) in paragraph at lines 86--87
-[]\OT1/cmr/m/n/10 Istanza 6: $[][] \OML/cmm/m/it/10 C[] \OT1/cmr/m/n/10 = 87651
-$, sche-du-la ot-ti-ma $\OML/cmm/m/it/10  \OT1/cmr/m/n/10 = (40\OML/cmm/m/it/1
-0 ; \OT1/cmr/m/n/10 8\OML/cmm/m/it/10 ; \OT1/cmr/m/n/10 36\OML/cmm/m/it/10 ; \O
-T1/cmr/m/n/10 30\OML/cmm/m/it/10 ; \OT1/cmr/m/n/10 3\OML/cmm/m/it/10 ; \OT1/cmr
-/m/n/10 51\OML/cmm/m/it/10 ; \OT1/cmr/m/n/10 33\OML/cmm/m/it/10 ; \OT1/cmr/m/n/
-10 43\OML/cmm/m/it/10 ; \OT1/cmr/m/n/10 20\OML/cmm/m/it/10 ; \OT1/cmr/m/n/10 52
-\OML/cmm/m/it/10 ; \OT1/cmr/m/n/10 35\OML/cmm/m/it/10 ; \OT1/cmr/m/n/10 5\OML/c
-mm/m/it/10 ; \OT1/cmr/m/n/10 53\OML/cmm/m/it/10 ; \OT1/cmr/m/n/10 16\OML/cmm/m/
-it/10 ; \OT1/cmr/m/n/10 44\OML/cmm/m/it/10 ; \OT1/cmr/m/n/10 4\OML/cmm/m/it/10 
-; \OT1/cmr/m/n/10 41\OML/cmm/m/it/10 ; \OT1/cmr/m/n/10 56\OML/cmm/m/it/10 ; \OT
-1/cmr/m/n/10 2\OML/cmm/m/it/10 ; \OT1/cmr/m/n/10 34\OML/cmm/m/it/10 ; \OT1/cmr/
-m/n/10 14\OML/cmm/m/it/10 ; \OT1/cmr/m/n/10 18\OML/cmm/m/it/10 ; \OT1/cmr/m/n/1
-0 24\OML/cmm/m/it/10 ; \OT1/cmr/m/n/10 57\OML/cmm/m/it/10 ; \OT1/cmr/m/n/10 19\
-OML/cmm/m/it/10 ; \OT1/cmr/m/n/10 21\OML/cmm/m/it/10 ; \OT1/cmr/m/n/10 15\OML/c
-mm/m/it/10 ; \OT1/cmr/m/n/10 9\OML/cmm/m/it/10 ; \OT1/cmr/m/n/10 12\OML/cmm/m/i
-t/10 ; \OT1/cmr/m/n/10 42\OML/cmm/m/it/10 ; \OT1/cmr/m/n/10 25\OML/cmm/m/it/10 
-; \OT1/cmr/m/n/10 7\OML/cmm/m/it/10 ; \OT1/cmr/m/n/10 45\OML/cmm/m/it/10 ; \OT1
-/cmr/m/n/10 13\OML/cmm/m/it/10 ; \OT1/cmr/m/n/10 50\OML/cmm/m/it/10 ; \OT1/cmr/
-m/n/10 49\OML/cmm/m/it/10 ; \OT1/cmr/m/n/10 59\OML/cmm/m/it/10 ; \OT1/cmr/m/n/1
-0 17\OML/cmm/m/it/10 ; \OT1/cmr/m/n/10 55\OML/cmm/m/it/10 ; \OT1/cmr/m/n/10 58\
-OML/cmm/m/it/10 ; \OT1/cmr/m/n/10 47\OML/cmm/m/it/10 ; \OT1/cmr/m/n/10 1\OML/cm
-m/m/it/10 ; \OT1/cmr/m/n/10 27\OML/cmm/m/it/10 ; \OT1/cmr/m/n/10 11\OML/cmm/m/i
-t/10 ; \OT1/cmr/m/n/10 28\OML/cmm/m/it/10 ; \OT1/cmr/m/n/10 37\OML/cmm/m/it/10 
-; \OT1/cmr/m/n/10 38\OML/cmm/m/it/10 ; \OT1/cmr/m/n/10 10\OML/cmm/m/it/10 ; \OT
-1/cmr/m/n/10 54\OML/cmm/m/it/10 ; \OT1/cmr/m/n/10 23\OML/cmm/m/it/10 ; \OT1/cmr
-/m/n/10 48\OML/cmm/m/it/10 ; \OT1/cmr/m/n/10 31\OML/cmm/m/it/10 ; \OT1/cmr/m/n/
-10 6\OML/cmm/m/it/10 ; \OT1/cmr/m/n/10 29\OML/cmm/m/it/10 ; \OT1/cmr/m/n/10 26\
-OML/cmm/m/it/10 ; \OT1/cmr/m/n/10 32\OML/cmm/m/it/10 ; \OT1/cmr/m/n/10 60\OML/c
-mm/m/it/10 ; \OT1/cmr/m/n/10 46\OML/cmm/m/it/10 ; \OT1/cmr/m/n/10 22\OML/cmm/m/
-it/10 ; \OT1/cmr/m/n/10 39)$ 
- []
-
-[3 <./schema_classi.pdf
-
-pdfTeX warning: pdflatex.exe (file ./schema_classi.pdf): PDF inclusion: invalid
- other resource which is no dict (key 'ProcSets', type <array>); ignored.
->] [4] (relazione.aux) ) 
+[2] [3] (relazione.aux) ) 
 Here is how much of TeX's memory you used:
- 14038 strings out of 492970
- 275822 string characters out of 3126593
- 329240 words of memory out of 3000000
- 17649 multiletter control sequences out of 15000+200000
- 9023 words of font info for 33 fonts, out of 3000000 for 9000
+ 14027 strings out of 492970
+ 275585 string characters out of 3126593
+ 329167 words of memory out of 3000000
+ 17643 multiletter control sequences out of 15000+200000
+ 8715 words of font info for 32 fonts, out of 3000000 for 9000
  1141 hyphenation exceptions out of 8191
- 55i,7n,54p,793b,220s stack positions out of 5000i,500n,10000p,200000b,50000s
-<C:/Users/david/AppData/Local/Programs/MiKTeX 2.9/fonts
-/type1/public/amsfonts/cm/cmbx10.pfb><C:/Users/david/AppData/Local/Programs/MiK
-TeX 2.9/fonts/type1/public/amsfonts/cm/cmbx12.pfb><C:/Users/david/AppData/Local
-/Programs/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmex10.pfb><C:/Users/david/
-AppData/Local/Programs/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmmi10.pfb><C:
+ 55i,7n,54p,793b,201s stack positions out of 5000i,500n,10000p,200000b,50000s
+<C:/Users/david/AppData/Local/Programs/MiKTeX 2.9/font
+s/type1/public/amsfonts/cm/cmbx12.pfb><C:/Users/david/AppData/Local/Programs/Mi
+KTeX 2.9/fonts/type1/public/amsfonts/cm/cmex10.pfb><C:/Users/david/AppData/Loca
+l/Programs/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmmi10.pfb><C:/Users/david
+/AppData/Local/Programs/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmmi7.pfb><C:
 /Users/david/AppData/Local/Programs/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/c
-mmi7.pfb><C:/Users/david/AppData/Local/Programs/MiKTeX 2.9/fonts/type1/public/a
-msfonts/cm/cmr10.pfb><C:/Users/david/AppData/Local/Programs/MiKTeX 2.9/fonts/ty
-pe1/public/amsfonts/cm/cmr12.pfb><C:/Users/david/AppData/Local/Programs/MiKTeX 
-2.9/fonts/type1/public/amsfonts/cm/cmr17.pfb><C:/Users/david/AppData/Local/Prog
-rams/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmsy10.pfb>
-Output written on relazione.pdf (4 pages, 152923 bytes).
+mr10.pfb><C:/Users/david/AppData/Local/Programs/MiKTeX 2.9/fonts/type1/public/a
+msfonts/cm/cmr12.pfb><C:/Users/david/AppData/Local/Programs/MiKTeX 2.9/fonts/ty
+pe1/public/amsfonts/cm/cmr17.pfb><C:/Users/david/AppData/Local/Programs/MiKTeX 
+2.9/fonts/type1/public/amsfonts/cm/cmsy10.pfb>
+Output written on relazione.pdf (3 pages, 92585 bytes).
 PDF statistics:
- 68 PDF objects out of 1000 (max. 8388607)
+ 47 PDF objects out of 1000 (max. 8388607)
  0 named destinations out of 1000 (max. 500000)
- 18 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 13 words of extra memory for PDF output out of 10000 (max. 10000000)
 

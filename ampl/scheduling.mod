@@ -26,12 +26,13 @@ param min_p > 0 integer;        # minimal processing times
 param max_p > 0 integer;        # maximal processing times
 param r {jobs} >= 0 integer;    # release dates
 param p {jobs} >= 0 integer;    # processing times
-
+param M >= 0 integer;			# Big M
 
 ## ----------------------------------------------
 ## VARIABLES
 var x {jobs} >= 0 integer;     # starting times
 var C {jobs} >= 0 integer;     # completion times
+var y {i in jobs, j in jobs} binary;	# precedence decision vars
 
 ## ----------------------------------------------
 ## OBJECTIVE FUNCTION
@@ -43,3 +44,7 @@ subject to wait_for_release {j in jobs}:
     x[j] >= r[j];
 subject to completion_after_processing {j in jobs}:
     C[j] = x[j] + p[j];
+subject to disjunction_first {i in jobs, j in jobs: i != j}:
+	M * (1 - y[i,j]) + x[j] >= C[i];
+subject to disjunction_second {i in jobs, j in jobs: i != j}:
+	M * y[i,j] + x[i] >= C[j];

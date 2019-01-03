@@ -13,6 +13,6 @@
 data;
 
 #param n := 30;
-#param minp := 1;
-#param maxp := 100;
+#param min_p := 1;
+#param max_p := 100;
 param M := 10000; # big M

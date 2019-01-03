@@ -14,6 +14,8 @@ reset;
 
 model scheduling.mod;
 
+data scheduling.dat;
+
 table jobs1 IN "ODBC" "instances_ampl.xlsx": 
 	jobs <- [jobs1], p, r;
 	
@@ -25,10 +27,10 @@ table jobs3 IN "ODBC" "instances_ampl.xlsx":
 
 table jobs4 IN "ODBC" "instances_ampl.xlsx": 
 	jobs <- [jobs4], p, r;
-	
+
 table jobs5 IN "ODBC" "instances_ampl.xlsx": 
 	jobs <- [jobs5], p, r;
-	
+
 table jobs6 IN "ODBC" "instances_ampl.xlsx": 
 	jobs <- [jobs6], p, r;
 
