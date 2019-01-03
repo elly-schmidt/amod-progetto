@@ -1,5 +1,6 @@
 import dnl.utils.text.table.TextTable;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.LinkedList;
 
@@ -85,8 +86,7 @@ public class Schedule {
         TextTable tt = new TextTable(columnNames, data);
         tt.printTable();
 
-
-        /*
+        /* // Print schedule
         for (ScheduledJob job : schedule) {
             System.out.print("****");
         }

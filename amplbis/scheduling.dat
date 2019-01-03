@@ -1,0 +1,18 @@
+################  SCHEDULING  ###################
+# on a single machine                           #
+# with release dates                            #
+# to minimize the sum of completion times       #
+#                                               #
+# --------------------------------------------- #
+# AMOD project 				                    #
+# Carmine Scarpitta,                            #
+# Davide Romano Tranzocchi,                     #
+# Elly Schmidt                                  #
+#################################################
+
+data;
+
+#param n := 30;
+#param minp := 1;
+#param maxp := 100;
+param M := 10000; # big M

@@ -14,25 +14,27 @@ reset;
 
 model scheduling.mod;
 
-table jobs1 IN "ODBC" "instances_ampl.xlsx": 
+data scheduling.dat;
+
+table jobs1 IN "ODBC" "instances_ampl_bis.xlsx": 
 	jobs <- [jobs1], p, r;
 	
-table jobs2 IN "ODBC" "instances_ampl.xlsx": 
+table jobs2 IN "ODBC" "instances_ampl_bis.xlsx": 
 	jobs <- [jobs2], p, r;
 
-table jobs3 IN "ODBC" "instances_ampl.xlsx": 
+table jobs3 IN "ODBC" "instances_ampl_bis.xlsx": 
 	jobs <- [jobs3], p, r;
 
-table jobs4 IN "ODBC" "instances_ampl.xlsx": 
+table jobs4 IN "ODBC" "instances_ampl_bis.xlsx": 
 	jobs <- [jobs4], p, r;
-	
-table jobs5 IN "ODBC" "instances_ampl.xlsx": 
+
+table jobs5 IN "ODBC" "instances_ampl_bis.xlsx": 
 	jobs <- [jobs5], p, r;
-	
-table jobs6 IN "ODBC" "instances_ampl.xlsx": 
+
+table jobs6 IN "ODBC" "instances_ampl_bis.xlsx": 
 	jobs <- [jobs6], p, r;
 
-read table jobs1;
+read table jobs3;
 
 option solver cplex; # or gurobi?
 
