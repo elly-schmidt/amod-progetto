@@ -44,6 +44,8 @@
 In questo documento saranno presentati gli aspetti salienti dell'applicazione sviluppata per risolvere il problema di scheduling $1 | r_j | \sum_{j} C_j$ impiegando un algoritmo di branch-and-bound combinatorio. Il progetto considerato è il numero 3 della tipologia A.
 
 \section{Installazione e avvio}
+Per poter eseguire il codice Java del progetto è necessario avere installato Java JDK oppure Java JRE, mentre per eseguire il codice AMPL è necessario l'omonimo programma. 
+Una volta ottenuta la cartella contenente il progetto, per eseguire l'applicazione Java basta aprire la cartella \texttt{amod-scheduling/src/} e avviare la classe \texttt{Main.java} con un ambiente di sviluppo integrato oppure direttamente da un terminale dopo aver compilato il codice sorgente. Invece per eseguire il codice AMPL è necessario avviare l'interprete dei comandi AMPL oppure l'interfaccia grafica AMPLIDE, spostarsi nella cartella \texttt{amod-progetto/ampl/} tramite il comando \texttt{cd} e lanciare il comando AMPL \texttt{include scheduling.run}. Per decidere quale istanza del problema di scheduling testare basta modificare la linea di codice \texttt{read table jobs1;} e sostituire il numero 1 con il numero dell'istanza desiderata.
 
 \section{Documentazione del codice}
 L'applicazione dapprima legge un file Excel contenente le istanze del problema di scheduling considerato impiegando le API fornite dal componente XSSF del progetto Apache POI. I moduli di questo componente consentono di creare, modificare, leggere e scrivere fogli elettronici nel formato di file .xlsx. Dunque l'applicazione costruisce un dataset a partire dalle istanze tramite un parser che analizza ogni cella del foglio elettronico e crea nuovi oggetti Java della classe Job inizializzandoli con i valori dei tempi di processamento e di rilascio contenuti all'interno del file. Infine applica l'algoritmo di branch-and-bound a ciascuna istanza al fine di ottenere la soluzione del problema di scheduling corrispondente.
@@ -74,4 +76,19 @@ Test effettuati su un calcolatore dotato di processore Intel Core i3 di terza ge
 \end{itemize}
 \section{Analisi sperimentale}
 Dai test si evince che i valori delle soluzioni fornite dalle due implementazioni sono confrontabili. Si ipotizza che lasciando proseguire la computazione per lo schema AMPL sia possibile ottenere soluzioni ottime migliori.
+
+\begin{thebibliography}{1}
+	\bibitem{notes} A. Agnetis.
+	\emph{Dispensa "Introduzione ai problemi di scheduling"}. 2000.
+	
+	\bibitem{notes} A. Pacifici.
+	\emph{Note del corso di Algoritmi e modelli per l'ottimizzazione discreta}.	2018.
+	
+	\bibitem{notes} C. Liti, M. Cosmi.
+	\emph{Diapositive delle esercitazioni di AMOD A.A. 2017/2018}
+	
+	\bibitem{link} R. Fourer, D. M. Gay, B. W. Kernighan.
+	\emph{"Database access"}, Capitolo 13 di "AMPL: A Modeling Language 
+		for Mathematical Programming". Seconda edizione.
+\end{thebibliography}
 \end{document}
