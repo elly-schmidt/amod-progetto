@@ -1,3 +1,8 @@
+package branch_and_bound;
+
+/**
+ * Enumeration for the state of the parser
+ */
 public enum ParserState {
     NONE,
     NUMBER_OF_JOBS,
