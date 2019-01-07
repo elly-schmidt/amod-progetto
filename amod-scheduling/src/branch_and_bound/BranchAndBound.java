@@ -172,7 +172,7 @@ public class BranchAndBound {
             // it does not make sense to explore the new job
             // If the lower bound is less then or equals to the best known upper bound,
             // we mark the node as an active node and we'll explore the node in the future
-            if (child.getLowerBound() <= getUpperBound()) {
+            if (child.getLowerBound() <= getUpperBound() && !checkPruningCondition(job, notScheduledJobs, node.getPartialSolution().makeSpan())) {
                 // Mark the node as active
                 getActiveNodes().add(child);
                 if (child.getK() == getInstance().getNumberOfJobs() - 1) {
@@ -194,8 +194,6 @@ public class BranchAndBound {
                     getActiveNodes().remove(child);
                 }
             }
-
-            // Pruning condition?
         }
 
         // We explored this node, so we can unmark it
@@ -220,6 +218,36 @@ public class BranchAndBound {
             return true;
         }
         // The known solution is better then the new solution
+        return false;
+    }
+
+    /**
+     * Check if the subtree rooted in node j has to be pruned.
+     *
+     * If releaseTime of job j >= max{ t, releaseTime of job i } + processingTime of job i for each i in otherNodes,
+     * then the job i can be done entirely before the job j is released.
+     * Therefore the subtree rooted in j can be pruned because it does not lead to an optimal solution.
+     * The value t is the time of completion of the sequence of jobs leading to job j.
+     * @param job job j
+     * @param notScheduledJobs not scheduled jobs
+     * @param currentInstant currentInstant
+     * @return true if the input subtree has to be pruned
+     */
+    private boolean checkPruningCondition(RunningJob job, ArrayList<RunningJob> notScheduledJobs, int currentInstant) {
+        int releaseTimeJ = job.getReleaseTime();
+
+        for (RunningJob i : notScheduledJobs) {
+            if (i.getId() == job.getId()) {
+                continue;
+            }
+            int releaseTimeI = i.getReleaseTime();
+            int processingTimeI = i.getProcessingTime();
+            // Pruning condition
+            if (releaseTimeJ >= Math.max(currentInstant, releaseTimeI) + processingTimeI) {
+                //System.out.println("pruned");
+                return true;
+            }
+        }
         return false;
     }
 
