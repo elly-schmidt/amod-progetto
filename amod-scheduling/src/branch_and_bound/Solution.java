@@ -1,201 +1,285 @@
 package branch_and_bound;
 
-import java.io.FileNotFoundException;
-import java.io.PrintWriter;
-import java.io.UnsupportedEncodingException;
-import java.util.ArrayList;
-import java.util.Map;
-import java.util.TreeMap;
-
 /**
  * Representation of the solution using HashMap
  */
-@SuppressWarnings("unused")
 public class Solution {
-    private static final String DEFAULT_PATH_FILES = "./data/";
-    private static final String DEFAULT_ENCODING = "UTF-8";
+    /**
+     * The reference to the instance to be solved
+     */
+    private static Instance instance;
 
     /**
-     * The instance to be solved
+     * The makespan of the solution
+     * (i.e. the completion time of the last job in the schedule)
      */
-    private RunningInstance instance;
+    private int makespan;
 
     /**
-     * The scheduled jobs stored as pairs (schedule_instant, job_id)
+     * The sum of the completion times of the scheduled jobs
      */
-    private TreeMap<Integer, RunningJob> schedule;
+    private int sumOfCompletionTimes;
 
-    public Solution(RunningInstance instance) {
-        this.instance = instance;
-        schedule = new TreeMap<>();
+    /**
+     * The array of the jobs
+     * For the jobs in the scheduled contains the start instant
+     * For the jobs not in the schedule contains the remaining processing time
+     */
+    private int[] jobs;
+
+    /**
+     * Constructor
+     * @param i the instance to be solved
+     */
+    Solution(Instance i) {
+        // The instance to be solved
+        instance = i;
+
+        // Initialize the array of the jobs
+        jobs = new int[instance.getNumberOfJobs()];
+
+        // Makespan initially set to 0 because there is no job in the schedule
+        makespan = 0;
+
+        // Sum of completion times initially set to 0 because there is no job in the schedule
+        sumOfCompletionTimes = 0;
     }
 
-    public Solution(RunningInstance instance, Solution aSol) {
-        this.instance = instance;
-        this.schedule = new TreeMap<>(aSol.getSchedule());
+    /**
+     * Constructor
+     * @param i the instance to be solved
+     * @param aSol the starting partial solution
+     */
+    Solution(Instance i, Solution aSol) {
+        // The instance to be solved
+        instance = i;
+
+        // Initialize the array of the jobs
+        jobs = new int[instance.getNumberOfJobs()];
+
+        // Initialize the start instant for the jobs already scheduled
+        for (int jobId = 1; jobId <= numberOfJobs(); jobId++) {
+            if (aSol.isScheduled(jobId)) {
+                int startInstant = aSol.getStartInstantForScheduledJob(jobId);
+                setStartInstantForScheduledJob(jobId, startInstant);
+            }
+        }
+
+        // Makespan initially set to the makespan of current partial solution
+        makespan = aSol.makespan;
+
+        // Sum of completion times initially set to the sum of completion times of current partial solution
+        sumOfCompletionTimes = aSol.sumOfCompletionTimes;
     }
 
     /**
      * Schedule the job with id jobId at the supplied instant
-     * @param jobId the id of the job to be scheduled
-     * @param startInstant the start instant
-     * @param processingTime the processing time
+     *
+     * @param jobId          the id of the job to be scheduled
+     * @param startInstant   the start instant
      */
-    void scheduleJob(int jobId, int startInstant, int processingTime) {
-        // Get the job
-        RunningJob job = getJob(jobId);
-        // Schedule at the supplied instant for processingTime
-        job.schedule(startInstant, processingTime);
-        // Add the job to the schedule
-        getSchedule().put(startInstant, job);
-    }
-
-    /**
-     * Get the scheduled jobs
-     * @return scheduledJobs
-     */
-    ArrayList<RunningJob> getScheduledJobs() {
-        return new ArrayList<>(getSchedule().values());
-    }
-
-    /**
-     * Get the completed jobs
-     * @return scheduledJobs
-     */
-    public ArrayList<RunningJob> getCompletedJobs() {
-        ArrayList<RunningJob> completedJobs = new ArrayList<>();
-        for (RunningJob job : getJobs()) {
-            if (job.isCompleted()) {
-                completedJobs.add(job);
-            }
+    void processAndScheduleJob(int jobId, int startInstant) {
+        if (isScheduled(jobId)) {
+            // Cannot schedule a job already scheduled
+            System.err.println("Already scheduled. Error in processAndScheduleJob()");
+            System.exit(-1);
         }
-        return completedJobs;
+
+        // Update the makespan
+        if (startInstant + instance.getJob(jobId).getProcessingTime() > makespan) {
+            makespan = startInstant + instance.getJob(jobId).getProcessingTime();
+        }
+
+        // Update the sum of completion times
+        sumOfCompletionTimes += startInstant + instance.getJob(jobId).getProcessingTime();
+
+        // Add the job to the schedule
+        setStartInstantForScheduledJob(jobId, startInstant);
+    }
+
+    void processJob(int jobId, int processingTime) {
+        if (isScheduled(jobId)) {
+            // Cannot process a job already scheduled
+            System.err.println("Job scheduled. Error in processAndScheduleJob()");
+            System.exit(-1);
+        } else {
+            // Job not scheduled
+            // Update processed time
+            int processedTime = getProcessedTimeForNotScheduledJob(jobId);
+            processedTime = processedTime + processingTime;
+            setProcessedTimeForNotScheduledJob(jobId, processedTime);
+        }
     }
 
     /**
-     * Get the size of the solution
-     * @return the size of the schedule
+     * Check if the job with id jobId is scheduled
+     *
+     * @param jobId the id of the job
+     * @return true if the job is scheduled, false otherwise
      */
-    public int size() {
-        return getSchedule().size();
+    boolean isScheduled(int jobId) {
+        return this.jobs[jobId-1] > 0;
+    }
+
+    /**
+     * Get the numberOfJobs of the solution
+     *
+     * @return the number of the jobs of the schedule
+     */
+    int numberOfJobs() {
+        return this.jobs.length;
     }
 
     /**
      * Get the sum of the completion time of the scheduled jobs
+     *
      * @return the sum of the completion time for the schedule
      */
-    int sumOfCompletionTimes() {
-        int sumOfCompletionTimes = 0;
-        for (RunningJob job : getJobs()) {
-            sumOfCompletionTimes += job.getCompletionTime();
-        }
+    int sumOfCompletionTimesForScheduledJobs() {
         return sumOfCompletionTimes;
     }
 
     /**
-     * Get the total time required by the actual solution (makespan)
-     * i.e. the completion time of the last job
-     * @return the makespan
-     */
-    int makeSpan() {
-        Map.Entry<Integer, RunningJob> entry = getSchedule().lastEntry();
-        if (entry == null)
-            return 0;
-        RunningJob job = entry.getValue();
-        return job.getCompletionTime();
-    }
-
-    /**
-     * Exporta la solución con el mismo formato que el
-     * fichero de especificación de problema a un fichero
-     * que se crea en el directorio data
-     * @param fileName the filename
-     */
-    public void exportSolutionToFile(String fileName) {
-        if (!fileName.contains(DEFAULT_PATH_FILES)) {
-            fileName = DEFAULT_PATH_FILES + fileName;
-        }
-
-        try {
-            PrintWriter writer = new PrintWriter(fileName, DEFAULT_ENCODING);
-            writer.print(this);
-            writer.close();
-
-        } catch (FileNotFoundException | UnsupportedEncodingException e) {
-            e.printStackTrace();
-        }
-    }
-
-    /* Getters and Setters */
-
-    /**
      * Get a string representation of the solution
+     *
      * @return the string representation
      */
     public String toString() {
         StringBuilder sb = new StringBuilder();
         String instant;
-        String jobId;
+        String jobIdStr;
         String completionTime;
 
-        sb.append(getInstance().getNumberOfJobs()).append("\n");
-        for(Map.Entry<Integer,RunningJob> entry : getSchedule().entrySet()) {
-            RunningJob job = entry.getValue();
-            completionTime = Integer.toString(job.getCompletionTime());
-            instant = Integer.toString(entry.getKey());
-            jobId = Integer.toString(job.getId());
+        sb.append(instance.getNumberOfJobs()).append("\n");
+        for (int jobId = 1; jobId <= this.numberOfJobs(); jobId++) {
+            if (!isScheduled(jobId)) {
+                continue;
+            }
+            int startInstant = getStartInstantForScheduledJob(jobId);
+            int processingTime = instance.getJob(jobId).getProcessingTime();
+            completionTime = Integer.toString(startInstant + processingTime);
+            instant = Integer.toString(startInstant);
+            jobIdStr = Integer.toString(jobId);
 
-            sb.append(instant).append(" ").append(jobId).append(" ").append(completionTime).append("\n");
+            sb.append(instant).append(" ").append(jobIdStr).append(" ").append(completionTime).append("\n");
         }
-        sb.append("Sum of completion times: ").append(sumOfCompletionTimes()).append("\n");
+        sb.append("Sum of completion times: ").append(sumOfCompletionTimesForScheduledJobs()).append("\n");
 
         return sb.toString();
     }
 
     /**
-     * Get the instance
-     * @return the instance
+     * Get the total time required by the actual solution (makespan)
+     * i.e. the completion time of the last job
+     *
+     * @return the makespan
      */
-    public RunningInstance getInstance() {
-        return instance;
+    int makeSpan() {
+        return makespan;
     }
 
     /**
-     * Set the instance
-     * @param instance the instance
+     * Check if the job has been completed
+     *
+     * @param jobId the id of the job
+     * @return true if the job has been completed, false otherwise
      */
-    public void setInstance(RunningInstance instance) {
-        this.instance = instance;
+    boolean isCompletedForNotScheduledJob(int jobId) {
+        if (getRemainingTimeForNotScheduledJob(jobId) < 0) {
+            // A job cannot execute more than its remaining time
+            System.err.println("A job cannot execute more than its remaining time");
+            System.err.println("The remaining time must be a positive number");
+            System.exit(-1);
+        }
+        return getRemainingTimeForNotScheduledJob(jobId) == 0;
     }
 
     /**
-     * Get the schedule
-     * @return the schedule
+     * Get the remaining time
+     *
+     * @return the remaining time
      */
-    public TreeMap<Integer, RunningJob> getSchedule() {
-        return schedule;
+    int getRemainingTimeForNotScheduledJob(int jobId) {
+        if (isScheduled(jobId)) {
+            // Job completed and scheduled
+            // The remaining time is not valid
+            System.err.println("Error in getRemainingTimeForNotScheduledJob");
+            System.exit(-1);
+        }
+        // Job not completed
+        // Get the remaining time
+        int processingTime = instance.getJob(jobId).getProcessingTime();
+        int processedTime = getProcessedTimeForNotScheduledJob(jobId);
+        return processingTime - processedTime;
     }
 
     /**
-     * Set the schedue
-     * @param schedule the schedule
+     * Get the remaining time
+     *
+     * @return the remaining time
      */
-    public void setSchedule(TreeMap<Integer, RunningJob> schedule) {
-        this.schedule = schedule;
+    @SuppressWarnings("unused")
+    int getCompletionTimeForScheduledJob(int jobId) {
+        if (!isScheduled(jobId)) {
+            // Job not scheduled
+            System.err.println("Job not yet completed or not scheduled");
+            System.exit(-1);
+        }
+        // Job scheduled
+        // Get the completion time
+        int startInstant = getStartInstantForScheduledJob(jobId);
+        int processingTime = instance.getJob(jobId).getProcessingTime();
+        return startInstant + processingTime;
     }
 
     /**
-     * Get the jobs of the instance
-     * @return the list of the jobs
+     * Set processing time
+     *
+     * @param jobId the id of the job
+     * @param processedTime the processed time
      */
-    public ArrayList<RunningJob> getJobs() {
-        return new ArrayList<>(getInstance().getRunningJobs().values());
+    private void setProcessedTimeForNotScheduledJob(int jobId, int processedTime) {
+        if (processedTime < 0) {
+            System.err.println("Error in setProcessedTimeForNotScheduledJob");
+        }
+        this.jobs[jobId-1] = -processedTime;
     }
 
     /**
-     * Get the job which has the supplied id
-     * @param jobId the job id
-     * @return the job
+     * Set the start instant for a scheduled job
+     *
+     * @param jobId the id of the job
+     * @param startInstant the start instant
      */
-    public RunningJob getJob(int jobId) { return getInstance().getRunningJobs().get(jobId); }
+    private void setStartInstantForScheduledJob(int jobId, int startInstant) {
+        if (startInstant < 0) {
+            System.err.println("Error in setStartInstantForScheduledJob");
+        }
+        this.jobs[jobId-1] = startInstant+1;
+    }
+
+    /**
+     * Get the processed time for a job not in the schedule
+     *
+     * @param jobId the id of the job
+     * @return the processed time
+     */
+    private int getProcessedTimeForNotScheduledJob(int jobId) {
+        if (isScheduled(jobId)) {
+            System.err.println("Error in getProcessedTimeForNotScheduledJob");
+        }
+        return -this.jobs[jobId-1];
+    }
+
+    /**
+     * Get the start instant for a scheduled job
+     * @param jobId the id of the job
+     * @return the start instant
+     */
+    private int getStartInstantForScheduledJob(int jobId) {
+        if (!isScheduled(jobId)) {
+            System.err.println("Error in getProcessedTimeForNotScheduledJob");
+        }
+        return this.jobs[jobId-1]-1;
+    }
 }

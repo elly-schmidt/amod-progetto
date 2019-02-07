@@ -26,6 +26,13 @@ public class Job {
 
     }
 
+    /**
+     * Constructor for a job
+     *
+     * @param id the id of the job
+     * @param processingTime the execution time
+     * @param releaseTime the release time
+     */
     public Job(int id, int processingTime, int releaseTime) {
         this.id = id;
         this.releaseTime = releaseTime;
@@ -54,7 +61,7 @@ public class Job {
      * Set the id of the job
      * @param id the id of the job
      */
-    public void setId(int id) {
+    void setId(int id) {
         this.id = id;
     }
 
@@ -62,7 +69,7 @@ public class Job {
      * Set the release time of the job
      * @param releaseTime the release time of the job
      */
-    public void setReleaseTime(int releaseTime) {
+    void setReleaseTime(int releaseTime) {
         this.releaseTime = releaseTime;
     }
 

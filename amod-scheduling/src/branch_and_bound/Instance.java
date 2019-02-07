@@ -6,13 +6,12 @@ import java.io.FileDescriptor;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.PrintStream;
-import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.*;
 
 import static branch_and_bound.Constants.INFINITY;
 
-@SuppressWarnings({"unused", "WeakerAccess"})
 public class Instance {
+
     /**
      * The number of the jobs belonging to the instance
      */
@@ -36,7 +35,9 @@ public class Instance {
     /**
      * An hashmap containing pair (id, job)
      */
-    private HashMap<Integer, Job> jobs;
+    private Job[] jobs;
+
+    //private TreeSet<Integer> jobsOrderedByReleaseTime;
 
     /**
      * Default constructor
@@ -45,8 +46,32 @@ public class Instance {
         this.numberOfJobs = 0;
         this.processingTimeMin = 0;
         this.processingTimeMax = INFINITY;
-        this.jobs = new HashMap<>();
+        //this.jobsOrderedByReleaseTime = new TreeSet<>(new MinReleaseTimeFirst());
     }
+
+    /**
+     * Compare two jobs considering the release time
+     */
+    class MinReleaseTimeFirst implements Comparator<Integer> {
+
+        @Override
+        public int compare(Integer j1, Integer j2) {
+            return Integer.compare(getJob(j1).getReleaseTime(), getJob(j2).getReleaseTime());
+        }
+    }
+
+    /**
+     * Compare two jobs considering the release time
+     */
+    class MinProcessingTimeFirst implements Comparator<Integer> {
+
+        @Override
+        public int compare(Integer j1, Integer j2) {
+            return Integer.compare(getJob(j1).getProcessingTime(), getJob(j2).getProcessingTime());
+        }
+    }
+
+
 
     /* Getters and setters */
 
@@ -62,61 +87,99 @@ public class Instance {
      * Getter for processing time min
      * @return the minimum processing time
      */
+    @SuppressWarnings("unused")
     public int getProcessingTimeMin() {
         return this.processingTimeMin;
     }
 
-
     /**
      * Getter for processing time max
+     *
      * @return the maximum processing time
      */
+    @SuppressWarnings("unused")
     public int getProcessingTimeMax() {
         return this.processingTimeMax;
     }
 
     /**
      * Setter for the number of jobs
+     *
      * @param numberOfJobs the number of jobs
      */
-    public void setNumberOfJobs(int numberOfJobs) {
+    void setNumberOfJobs(int numberOfJobs) {
         this.numberOfJobs = numberOfJobs;
+        this.jobs = new Job[numberOfJobs];
     }
 
     /**
      * Setter for min processing time
+     *
      * @param processingTimeMin the minimum processing time
      */
-    public void setProcessingTimeMin(int processingTimeMin) {
+    void setProcessingTimeMin(int processingTimeMin) {
         this.processingTimeMin = processingTimeMin;
     }
 
     /**
      * Setter for max processing time
+     *
      * @param processingTimeMax the maximum processing time
      */
-    public void setProcessingTimeMax(int processingTimeMax) {
+    void setProcessingTimeMax(int processingTimeMax) {
         this.processingTimeMax = processingTimeMax;
     }
 
     /**
      * Getter for the jobs hashmap
+     *
      * @return the jobs hasmap
      */
-    public HashMap<Integer, Job> getJobs() {
+    public Job[] getJobs() {
         return this.jobs;
+    }
+
+    /**
+     * Sort jobs by release time
+     *
+     * @return the jobs hasmap
+     */
+    PriorityQueue<Integer> getJobsSortedByReleaseTime() {
+        PriorityQueue<Integer> sortedJobs = new PriorityQueue<>(numberOfJobs, new MinReleaseTimeFirst());
+        for (int jobId = 1; jobId <= numberOfJobs; jobId++) {
+            sortedJobs.add(jobId);
+        }
+        return sortedJobs;
+    }
+
+    /**
+     * Sort jobs by processing time
+     *
+     * @return the jobs hasmap
+     */
+    PriorityQueue<Integer> getJobsSortedByProcessingTime() {
+        PriorityQueue<Integer> sortedJobs = new PriorityQueue<>(numberOfJobs, new MinProcessingTimeFirst());
+        for (int jobId = 1; jobId <= numberOfJobs; jobId++) {
+            sortedJobs.add(jobId);
+        }
+        return sortedJobs;
+    }
+
+    /**
+     * Getter for the job
+     * @return the job
+     */
+    Job getJob(int jobId) {
+        return this.jobs[jobId-1];
     }
 
     /**
      * Add a new job to the jobs hashmap
      * @param job the new job
      */
-    public void addJob(Job job) {
-        this.jobs.put(job.getId(), job);
-    }
-
-    public void removeJob(int jobId) {
-        this.jobs.remove(jobId);
+    void addJob(Job job) {
+        this.jobs[job.getId()-1] = job;
+        //this.jobsOrderedByReleaseTime.add(job.getId());
     }
 
     /**
@@ -131,44 +194,14 @@ public class Instance {
      * Setter for the name of the instance
      * @param name the name of the instance
      */
-    public void setName(String name) {
+    void setName(String name) {
         this.name = name;
-    }
-
-    /**
-     * Get the jobs which has been released at currentInsant
-     * @param currentInstant the current instant
-     * @return the list of the job ids
-     */
-    public ArrayList<Integer> getReleasedJobs(int currentInstant) {
-        ArrayList<Integer> releasedJobs = new ArrayList<>();
-        for (Job job : getJobs().values()) {
-            if (currentInstant <= job.getReleaseTime()) {
-                // The job has been released
-                releasedJobs.add(job.getId());
-            }
-        }
-        // Return the result
-        return releasedJobs;
-    }
-
-    /**
-     * Get the processing of all jobs
-     * @return an hashmap containing pairs (jobId, processing time)
-     */
-    public HashMap<Integer, Integer> getProcessingTimes() {
-        HashMap<Integer, Integer> processingTimes = new HashMap<>();
-        for (Job job : getJobs().values()) {
-            processingTimes.put(job.getId(), job.getProcessingTime());
-        }
-        // Return the result
-        return processingTimes;
     }
 
     /**
      * Print the instance on the console
      */
-    public void printInstance() {
+    void printInstance() {
         printInstance(null);
     }
 
@@ -176,7 +209,7 @@ public class Instance {
      * This method print an instance
      * If outputFilename is not null, print on a file
      */
-    public void printInstance(String outputFilename) {
+    void printInstance(String outputFilename) {
 
         try {
             // If outputFilename is not null, redirect output to file
@@ -186,7 +219,7 @@ public class Instance {
             }
 
             // Print instance metadata
-            System.out.println(String.format("********* branch_and_bound.Instance %s *********", this.name));
+            System.out.println(String.format("********* Instance %s *********", this.name));
             System.out.println(String.format("Number of jobs: %d", this.numberOfJobs));
             System.out.println(String.format("Min processing time: %d", this.processingTimeMin));
             System.out.println(String.format("Max processing time: %d", this.processingTimeMax));
@@ -203,14 +236,11 @@ public class Instance {
 
             // Fill table with instance data
             Object[][] data = new Object[this.numberOfJobs][3];
-            int i = 0;
 
-            for (Job j : this.jobs.values()) {
-                data[i][0] = j.getId();
-                data[i][1] = j.getProcessingTime();
-                data[i][2] = j.getReleaseTime();
-
-                i++;
+            for (int i = 0; i < this.jobs.length; i++) {
+                data[i][0] = this.jobs[i].getId();
+                data[i][1] = this.jobs[i].getProcessingTime();
+                data[i][2] = this.jobs[i].getReleaseTime();
             }
 
             // Print table
@@ -218,6 +248,7 @@ public class Instance {
             tt.printTable();
 
             System.out.println("************************************");
+            System.out.println("____________________________________");
             System.out.println();
             System.out.println();
             System.out.println();

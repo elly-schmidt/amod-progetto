@@ -1,30 +1,28 @@
 package branch_and_bound;
 
-import java.util.ArrayList;
-import java.util.function.Predicate;
+import java.util.*;
+
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.TimeUnit;
 
 public class BranchAndBound {
     /**
-     * The instance to be solved
+     * The reference to the instance to be solved
      */
-    private final Instance instance;
+    public static Instance instance;
 
     /**
-     * ArrayList containing the active nodes
-     * During the execution we discard the nodes which
-     * don't minimize the sum of the completion times
-     * and we mark as active the promising nodes
-     * which has to be explored by the next steps
-     * of the B&B algorithm
+     * The ID of the main thread
      */
-    private ArrayList<TreeNode> activeNodes;
+    private long mainThreadId;
 
     /**
      * The best known upper bound
      * This value is updated during the execution of the B&B
-     * algorithm whenever a better value (lower) is found
+     * algorithm whenever a better value (lower upper bound) is found
      */
-    private int upperBound;						// Upper bound
+    private int upperBound;
 
     /**
      * The best known solution
@@ -33,58 +31,148 @@ public class BranchAndBound {
      * algorithm whenever a better schedule
      * (which has a lower sum of completion times) is found
      */
-    private Solution bestSolution;				// Best solution
+    private Solution bestSolution;
 
+    /**
+     * Allow to split the computation between several threads
+     * in order to reduce the execution time on multi-core processors
+     */
+    private ExecutorService executor;
 
     /**
      * Initialize a Branch and Bound algorithm
-     * @param instance the instance to be solved
      */
-    public BranchAndBound(Instance instance) {
-        this.instance = instance;
-        this.activeNodes = new ArrayList<>();
-        this.upperBound = calculateUpperBound();
+    public BranchAndBound(Instance i) {
+        // The instance to be solved
+        instance = i;
+
+        // Calculate upper bounds
+        Solution lowerIndexFirstSolution = calculateLowerIndexFirstSchedule();
+        Solution lowerReleaseTimeFirstSolution = calculateLowerReleaseTimeFirstSchedule();
+        Solution lowerProcessingTimeFirstSolution = calculateLowerProcessingTimeFirstSchedule();
+
+        // Update the best upper bound
         this.bestSolution = null;
+        if (updateSolution(lowerIndexFirstSolution)) {
+            setUpperBound(lowerIndexFirstSolution.sumOfCompletionTimesForScheduledJobs());
+        }
+        if (updateSolution(lowerReleaseTimeFirstSolution)) {
+            setUpperBound(lowerReleaseTimeFirstSolution.sumOfCompletionTimesForScheduledJobs());
+        }
+        if (updateSolution(lowerProcessingTimeFirstSolution)) {
+            setUpperBound(lowerProcessingTimeFirstSolution.sumOfCompletionTimesForScheduledJobs());
+        }
+
+        // Get main thread ID
+        mainThreadId = Thread.currentThread().getId();
+
+        // Initialize the executor
+        // Split the computation between several threads
+        executor = Executors.newFixedThreadPool(Runtime.getRuntime().availableProcessors());
     }
 
     /**
-     * Compute an upper bound
+     * Compare two partial solutions considering the lower bound
+     */
+    class MinLowerBoundFirst implements Comparator<TreeNode> {
+
+        @Override
+        public int compare(TreeNode j1, TreeNode j2) {
+            return Integer.compare(
+                    j1.getLowerBound(),
+                    j2.getLowerBound()
+            );
+        }
+    }
+
+    private int scheduleJob(int currentTime, Job j, Solution sol) {
+        // Get the release time and the processing time of the job
+        int releaseTime = j.getReleaseTime();
+        int processingTime = j.getProcessingTime();
+
+        // Compute the completion time for the job
+        int completionTime;
+        if (currentTime <= releaseTime) {
+            // The job has not yet been released at the current time
+            // will be scheduled at its release time
+            // and will be completed after processing time
+            completionTime = releaseTime + processingTime;
+            sol.processAndScheduleJob(j.getId(), releaseTime);
+        } else {
+            // The job has been released at the current time,
+            // will be scheduled at the current time
+            // and will be completed after processing time
+            completionTime = currentTime + processingTime;
+            sol.processAndScheduleJob(j.getId(), currentTime);
+        }
+        return completionTime;
+    }
+
+    /**
      * Schedule the jobs in the order given by the instance without preemption
      * The sum of the completion times is an upper bound for the instance
      * @return the computed upper bound
      */
-    private int calculateUpperBound() {
-        int upperBound = 0;     // The computed upper bound
-        int currentTime = 0;    // The current instant
+    private Solution calculateLowerIndexFirstSchedule() {
+        // The current instant
+        int currentTime = 0;
 
-        // Schedule each job and update the sum of the completion times
-        for (Job j : getJobs()) {
-            // For each job
-            // Get the release time and the processing time of the job
-            int releaseTime = j.getReleaseTime();
-            int processingTime = j.getProcessingTime();
-
-            // Compute the completion time for the job
-            int completionTime;
-            if (currentTime <= releaseTime) {
-                // The job has not yet been released at the current time
-                // will be scheduled at its release time
-                // and will be completed after processing time
-                completionTime = releaseTime + processingTime;
-            } else {
-                // The job has been released at the current time,
-                // will be scheduled at the current time
-                // and will be completed after processing time
-                completionTime = currentTime + processingTime;
-            }
-
-            // Update the sum of the completion times (i.e. the upper bound)
-            upperBound += completionTime;
-            // Update the current instant
-            currentTime = completionTime;
+        Solution solution = new Solution(instance);
+        // Schedule the jobs
+        for (Job j : instance.getJobs()) {
+            // Schedule the job and update the current instant
+            currentTime = scheduleJob(currentTime, j, solution);
         }
         // Return the result
-        return upperBound;
+        return solution;
+    }
+
+    /**
+     * Schedule the jobs in the order given by the release time without preemption
+     * The sum of the completion times is an upper bound for the instance
+     * @return the computed upper bound
+     */
+    private Solution calculateLowerReleaseTimeFirstSchedule() {
+        // The current instant
+        int currentTime = 0;
+
+        Solution solution = new Solution(instance);
+        // Schedule the jobs
+        PriorityQueue<Integer> sortedJobs = instance.getJobsSortedByReleaseTime();
+        while (!sortedJobs.isEmpty()) {
+            // Get the job with the lowest release time
+            int jobId = sortedJobs.poll();
+            Job j = instance.getJob(jobId);
+
+            // Schedule the job and update the current instant
+            currentTime = scheduleJob(currentTime, j, solution);
+        }
+        // Return the result
+        return solution;
+    }
+
+    /**
+     * Schedule the jobs in the order given by the processing time without preemption
+     * The sum of the completion times is an upper bound for the instance
+     * @return the computed upper bound
+     */
+    private Solution calculateLowerProcessingTimeFirstSchedule() {
+        // The current instant
+        int currentTime = 0;
+
+        Solution solution = new Solution(instance);
+        // Schedule the jobs
+        PriorityQueue<Integer> sortedJobs = instance.getJobsSortedByProcessingTime();
+        while (!sortedJobs.isEmpty()) {
+            // Get the job with the lowest processing time
+            int jobId = sortedJobs.poll();
+            Job j = instance.getJob(jobId);
+
+            // Schedule the job and update the current instant
+            currentTime = scheduleJob(currentTime, j, solution);
+        }
+        // Return the result
+        return solution;
     }
 
     /**
@@ -95,37 +183,29 @@ public class BranchAndBound {
      */
     public void execute() {
         // Create the root of the B&B tree
-        TreeNode root = new TreeNode(getInstance());
-        // The root is at level 0 of the tree
-        root.setK(0);
-        // The root has to be explored: mark as active
-        getActiveNodes().add(root);
+        // The root is at level 0 of the tree (k=0)
+        int k = 0;
+        TreeNode root = new TreeNode(instance, k);
 
-        // Explore all the active nodes starting from the most promising,
-        // the one with the smallest lower bound
-        while (getActiveNodes().size() != 0) {
-            // Search for the node with the smallest lower bound...
-            int minBound = Constants.INFINITY;
-            TreeNode nodeWithSmallestLB = null;
-            for (int i = 0; i < getActiveNodes().size(); i++) {
-                if (getActiveNodes().get(i).getLowerBound() < minBound) {
-                    minBound = getActiveNodes().get(i).getLowerBound();
-                    nodeWithSmallestLB = getActiveNodes().get(i);
+        // The root needs to be explored: branch
+        branch(root);
+
+        // Main thread has completed its work
+        // Before termination we have to wait for other threads termination
+        executor.shutdown();
+        boolean isWait = true;
+        while (isWait) {
+            try {
+                isWait = !executor.awaitTermination(30, TimeUnit.MINUTES);
+                if (isWait) {
+                    System.out.println("Awaiting completion of bulk callback threads.");
                 }
-            }
-
-            // ...and branch it
-            if (nodeWithSmallestLB != null) {
-                branch(nodeWithSmallestLB);
-            } else {
-                // There is at least one active node
-                // but we are unable to find a node with the smallest lower bound
-                // This sounds like a programming error
-                System.err.println("Cannot find the node with the smallest lower bound");
-                System.err.println("This is a programming error");
-                System.exit(-1);
+            } catch (InterruptedException e) {
+                System.out.println("Interruped while awaiting completion of callback threads - trying again...");
             }
         }
+        // All tasks completed, terminate the algorithm
+        System.out.println("Finished all threads");
     }
 
     /**
@@ -136,46 +216,90 @@ public class BranchAndBound {
      * @param node the node
      */
     private void branch(TreeNode node) {
-        // Get the list of the jobs not yet scheduled...
-        ArrayList<RunningJob> notScheduledJobs = node.getNotScheduledJobs();
-        //...and reset the remaining time and the completion time
-        for (RunningJob job : notScheduledJobs) {
-            // The job has not yet started,
-            // set the remaining time to the processing time
-            job.setRemainingTime(job.getProcessingTime());
-            // The job is not completed, set completion time to 0
-            job.setCompletionTime(0);
-        }
+
+        // Priority queue containing the active nodes
+        // During the execution we discard the nodes which
+        // don't minimize the sum of the completion times
+        // and we mark as active the promising nodes
+        // which has to be explored by the next steps
+        // of the B&B algorithm
+        @SuppressWarnings("UnstableApiUsage")
+        com.google.common.collect.MinMaxPriorityQueue<TreeNode> activeNodes = com.google.common.collect.MinMaxPriorityQueue
+                .orderedBy(new MinLowerBoundFirst())
+                .expectedSize(instance.getNumberOfJobs() - node.getK())
+                .create();
 
         int startInstant;
         // Mark as active all the promising nodes
-        for (RunningJob job : notScheduledJobs) {
-            if (job.getReleaseTime() > node.getPartialSolution().makeSpan()) {
+        for (int jobId = 1; jobId <= node.getPartialSolution().numberOfJobs(); jobId++) {
+            if (node.getPartialSolution().isScheduled(jobId)) {
+                // The job is already scheduled in the partial solution
+                continue;
+            }
+
+            if (instance.getJob(jobId).getReleaseTime() > node.getPartialSolution().makeSpan()) {
                 // The job has not yet been released
-                // Set the start instant to the release time
-                startInstant = job.getReleaseTime();
+                // The start instant is the release time
+                startInstant = instance.getJob(jobId).getReleaseTime();
             } else {
                 // The job has been released
-                // Set the start instant to the completion time of the current schedule
+                // The start instant is the completion time of the current schedule
                 startInstant = node.getPartialSolution().makeSpan();
             }
-            // Create a new tree node which consider the current schedule + the new job
-            TreeNode child = new TreeNode(this.instance, node.getPartialSolution());
-            // The node is located at a lower level in the enumeration tree
-            child.setK(node.getK() + 1);
+            // Create a new tree node which consider the current partial schedule + the new job
+            // Increase k because the node is located at a lower level in the enumeration tree
+            int k = node.getK() + 1;
+            TreeNode child = new TreeNode(instance, node.getPartialSolution(), k);
+
             // Schedule the new job
-            child.getPartialSolution().scheduleJob(job.getId(), startInstant, job.getProcessingTime());
+            child.getPartialSolution().processAndScheduleJob(jobId, startInstant);
+
             // Compute a lower bound for the new node
             child.calculateLowerBound();
+
+            // If the computed schedule is not preemptive
+            // the computed lower bound is also an upper bound for the instance
+            if (!child.isPreemptive()) {
+                // Get the schedule...
+                child.getNotPreemptiveSchedule();
+                // ...and update upper bound
+                if (updateSolution(child.getPartialSolution())) {
+                    setUpperBound(child.getLowerBound());
+                }
+                continue;
+            }
 
             // If the lower bound is greater then the best known upper bound,
             // it does not make sense to explore the new job
             // If the lower bound is less then or equals to the best known upper bound,
             // we mark the node as an active node and we'll explore the node in the future
-            if (child.getLowerBound() <= getUpperBound() && !checkPruningCondition(job, notScheduledJobs, node.getPartialSolution().makeSpan())) {
-                // Mark the node as active
-                getActiveNodes().add(child);
-                if (child.getK() == getInstance().getNumberOfJobs() - 1) {
+            // Prune those nodes with higher lower bound than the current upper bound
+            if (child.getLowerBound() <= getUpperBound()) {
+                // Check pruning condition
+                boolean prune = false;
+                for (int jobId2 = 1; jobId2 <= node.getPartialSolution().numberOfJobs(); jobId2++) {
+                    if (jobId == jobId2)
+                        // Skip the job itself
+                        continue;
+                    if (!node.getPartialSolution().isScheduled(jobId) &&
+                            checkPruningCondition(jobId, jobId2, node.getPartialSolution().makeSpan())) {
+                        prune = true;
+                        break;
+                    }
+                }
+
+                if (prune) {
+                    // If the condition is satisfied for some job
+                    // the optimal solution is not on this branch
+                    continue;
+                }
+
+                // The lower bound is lower than the best known upper bound
+                // and the pruning condition is not satisfied
+                // The node needs to be explored in the next steps,
+                // mark as active
+                activeNodes.add(child);
+                if (child.getK() == instance.getNumberOfJobs()) {
                     // The node is a leaf of the tree,
                     // the found solution is a non-preemptive solution
                     // and the found lower bound is also an upper bound for the instance
@@ -184,20 +308,31 @@ public class BranchAndBound {
                         // if it minimizes the sum of the completion times
                         // and update the best known upper bound
                         setUpperBound(child.getLowerBound());
-                        // Prune those nodes with higher lower bound than the current upper bound
-                        for (int j = 0; j < getActiveNodes().size(); j++) {
-                            Predicate<TreeNode> nodePredicate = n-> n.getLowerBound() > getUpperBound();
-                            getActiveNodes().removeIf(nodePredicate);
-                        }
                     }
                     // We explored this leaf node, so we can unmark it
-                    getActiveNodes().remove(child);
+                    activeNodes.remove(child);
                 }
             }
         }
+        // Explore all the active nodes starting from the most promising,
+        // the one with the smallest lower bound
+        while (!activeNodes.isEmpty()) {
+            // Search for the node with the smallest lower bound...
+            TreeNode nodeWithSmallestLB;
+            nodeWithSmallestLB = activeNodes.pollFirst();
 
-        // We explored this node, so we can unmark it
-        getActiveNodes().remove(node);
+            // ...and branch it
+            if (nodeWithSmallestLB.getLowerBound() < getUpperBound()) {
+                if (Thread.currentThread().getId() == mainThreadId && node.getK() == instance.getNumberOfJobs()/4) {
+                    // Assign the job to a secondary thread
+                    Runnable worker = new WorkerThread(nodeWithSmallestLB);
+                    executor.execute(worker);
+                } else {
+                    // Branch
+                    branch(nodeWithSmallestLB);
+                }
+            }
+        }
     }
 
     /**
@@ -211,7 +346,7 @@ public class BranchAndBound {
             // Actually the new solution is the best solution
             setBestSolution(sol);
             return true;
-        } else if (sol.sumOfCompletionTimes() < getBestSolution().sumOfCompletionTimes()) {
+        } else if (sol.sumOfCompletionTimesForScheduledJobs() < getBestSolution().sumOfCompletionTimesForScheduledJobs()) {
             // The new solution is better then the known solution,
             // update the best solution
             setBestSolution(sol);
@@ -228,46 +363,21 @@ public class BranchAndBound {
      * then the job i can be done entirely before the job j is released.
      * Therefore the subtree rooted in j can be pruned because it does not lead to an optimal solution.
      * The value t is the time of completion of the sequence of jobs leading to job j.
-     * @param job job j
-     * @param notScheduledJobs not scheduled jobs
+     * @param jobId first job
+     * @param jobId2 second job
      * @param currentInstant currentInstant
      * @return true if the input subtree has to be pruned
      */
-    private boolean checkPruningCondition(RunningJob job, ArrayList<RunningJob> notScheduledJobs, int currentInstant) {
-        int releaseTimeJ = job.getReleaseTime();
+    private boolean checkPruningCondition(int jobId, int jobId2, int currentInstant) {
+        int releaseTimeJ = instance.getJob(jobId).getReleaseTime();
 
-        for (RunningJob i : notScheduledJobs) {
-            if (i.getId() == job.getId()) {
-                continue;
-            }
-            int releaseTimeI = i.getReleaseTime();
-            int processingTimeI = i.getProcessingTime();
-            // Pruning condition
-            if (releaseTimeJ >= Math.max(currentInstant, releaseTimeI) + processingTimeI) {
-                //System.out.println("pruned");
-                return true;
-            }
-        }
-        return false;
+        int releaseTimeI = instance.getJob(jobId2).getReleaseTime();
+        int processingTimeI = instance.getJob(jobId2).getProcessingTime();
+        // Pruning condition
+        return releaseTimeJ >= Math.max(currentInstant, releaseTimeI) + processingTimeI;
     }
 
     /* Getters and Setters */
-
-    /**
-     * Get the instance we are working on
-     * @return the instance
-     */
-    public Instance getInstance() {
-        return instance;
-    }
-
-    /**
-     * Get the active nodes list
-     * @return the active nodes list
-     */
-    private ArrayList<TreeNode> getActiveNodes() {
-        return activeNodes;
-    }
 
     /**
      * Get the best known upper bound
@@ -281,7 +391,7 @@ public class BranchAndBound {
      * Update the best known upper bound
      * @param upperBound the upper bound
      */
-    private void setUpperBound(int upperBound) {
+    private synchronized void setUpperBound(int upperBound) {
         this.upperBound = upperBound;
     }
 
@@ -297,15 +407,25 @@ public class BranchAndBound {
      * Set the best known solution
      * @param bestSolution the solution
      */
-    private void setBestSolution(Solution bestSolution) {
+    private synchronized void setBestSolution(Solution bestSolution) {
         this.bestSolution = bestSolution;
     }
 
     /**
-     * Get the jobs of the instance
-     * @return the list of the jobs
+     * Define a worker thread
      */
-    public ArrayList<Job> getJobs() {
-        return new ArrayList<>(getInstance().getJobs().values());
+    public class WorkerThread implements Runnable {
+
+        private TreeNode node;
+
+        private WorkerThread(TreeNode node){
+            this.node=node;
+        }
+
+        @Override
+        public void run() {
+            branch(node);
+        }
     }
+
 }

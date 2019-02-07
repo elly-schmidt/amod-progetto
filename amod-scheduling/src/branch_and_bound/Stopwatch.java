@@ -4,14 +4,13 @@ package branch_and_bound;
  * This class contains some methods which allow
  * to measure the performance of the B&B algorithm
  */
-@SuppressWarnings({"unused", "WeakerAccess"})
-public class Clock {
+public class Stopwatch {
     /**
      * The start instant of the measurement
      */
     private long start;
 
-    public Clock() {
+    public Stopwatch() {
         start = 0;
     }
 
@@ -19,8 +18,7 @@ public class Clock {
      * Getter for start
      * @return the start time
      */
-    @SuppressWarnings("WeakerAccess")
-    public long getStart() {
+    private long getStart() {
         return start;
     }
 
@@ -28,7 +26,7 @@ public class Clock {
      * Setter for start
      * @param start the start time
      */
-    public void setStart(long start) {
+    private void setStart(long start) {
         this.start = start;
     }
 
@@ -42,7 +40,19 @@ public class Clock {
     /** Get the elapsed time
      * @return the elapsed time
      */
-    public double getElapsedTime() {
+    private double getElapsedTime() {
         return System.currentTimeMillis() - getStart();
+    }
+
+    public String prettyPrintElapsedTime() {
+        double elapsed = getElapsedTime();
+        int seconds = (int) Math.floor(elapsed / 1000);
+        int milliseconds = (int) elapsed % 1000;
+        int minutes = (int) Math.floor((double)seconds / 60);
+        seconds = seconds % 60;
+        int hours = (int) Math.floor((double)minutes / 60);
+        minutes = minutes % 60;
+
+        return "Time in milliseconds: " + elapsed + "\nElapsed: " + hours + ":" + minutes + ":" + seconds + ":" + milliseconds;
     }
 }

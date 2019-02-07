@@ -8,7 +8,6 @@ import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
-import java.util.ArrayList;
 
 /**
  * This class represents a dataset, which is a collection of instances
@@ -22,16 +21,18 @@ public class Dataset {
     /**
      * Collection of instances
      */
-    private ArrayList<Instance> instances;
+    private Instance[] instances;
 
+    /**
+     * Default constructor
+     */
     public Dataset() {
         this.numberOfInstances = 0;
-        this.instances = new ArrayList<>();
     }
 
     /**
      * Build a dataset from xlsx file: check the documentation
-     * for a detailed explaination of instance file format
+     * for a detailed explanation of instance file format
      */
     public void buildDatasetFromXlsxFile(String filename) {
         FileInputStream excelFile;
@@ -43,15 +44,15 @@ public class Dataset {
 
             // Get number of sheets
             this.numberOfInstances = workbook.getNumberOfSheets();
+            this.instances = new Instance[this.numberOfInstances];
 
             // Parse xlsx file and build dataset
             for (int i = 0; i < numberOfInstances; i++) {
                 // Create a new instance and add it to the dataset
-                Instance instance = new Instance();
-                this.instances.add(instance);
+                Instance instance = null;
                 // Get the sheet associated to the instance
                 Sheet sheet = workbook.getSheetAt(i);
-                instance.setName(sheet.getSheetName());
+                String name = sheet.getSheetName();
 
                 ParserState currentState = ParserState.NONE;
                 // Iterate on the rows of the sheet
@@ -88,6 +89,9 @@ public class Dataset {
                         } else if (currentCell.getCellType() == CellType.NUMERIC) {
                             switch (currentState) {
                                 case NUMBER_OF_JOBS:
+                                    instance = new Instance();
+                                    instance.setName(name);
+                                    this.instances[i] = instance;
                                     instance.setNumberOfJobs((int) currentCell.getNumericCellValue());
                                     break;
                                 case PROCESSING_TIME_MIN:
@@ -123,7 +127,7 @@ public class Dataset {
                     }
 
                     // Consistency check
-                    assert(instance.getNumberOfJobs() == instance.getJobs().size());
+                    assert(instance.getNumberOfJobs() == instance.getJobs().length);
                 }
 
                 // Print on console
@@ -134,7 +138,7 @@ public class Dataset {
                 instance.printInstance(outFilename);
 
                 // Consistency check
-                assert(this.numberOfInstances == instances.size());
+                assert(this.numberOfInstances == instances.length);
 
             }
         } catch (IOException e) {
@@ -146,7 +150,8 @@ public class Dataset {
      * Get the instances contained in the dataset
      * @return the list of the instances
      */
-    public ArrayList<Instance> getInstances() {
+    public Instance[] getInstances() {
         return instances;
     }
+
 }
