@@ -1,7 +1,7 @@
 package branch_and_bound;
 
 /**
- * Representation of the solution using HashMap
+ * Representation of the solution
  */
 public class Solution {
     /**

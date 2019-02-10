@@ -131,9 +131,9 @@ public class Instance {
     }
 
     /**
-     * Getter for the jobs hashmap
+     * Getter for the jobs
      *
-     * @return the jobs hasmap
+     * @return the jobs
      */
     public Job[] getJobs() {
         return this.jobs;
@@ -142,7 +142,7 @@ public class Instance {
     /**
      * Sort jobs by release time
      *
-     * @return the jobs hasmap
+     * @return the jobs
      */
     PriorityQueue<Integer> getJobsSortedByReleaseTime() {
         PriorityQueue<Integer> sortedJobs = new PriorityQueue<>(numberOfJobs, new MinReleaseTimeFirst());

@@ -50,6 +50,7 @@ public class BranchAndBound {
         Solution lowerIndexFirstSolution = calculateLowerIndexFirstSchedule();
         Solution lowerReleaseTimeFirstSolution = calculateLowerReleaseTimeFirstSchedule();
         Solution lowerProcessingTimeFirstSolution = calculateLowerProcessingTimeFirstSchedule();
+        Solution lowerProcessingTimeReleaseTimeFirstSolution = calculateLowerProcessingTimeLowerReleaseTimeFirstSchedule();
 
         // Update the best upper bound
         this.bestSolution = null;
@@ -61,6 +62,9 @@ public class BranchAndBound {
         }
         if (updateSolution(lowerProcessingTimeFirstSolution)) {
             setUpperBound(lowerProcessingTimeFirstSolution.sumOfCompletionTimesForScheduledJobs());
+        }
+        if (updateSolution(lowerProcessingTimeReleaseTimeFirstSolution)) {
+            setUpperBound(lowerProcessingTimeReleaseTimeFirstSolution.sumOfCompletionTimesForScheduledJobs());
         }
 
         // Get main thread ID
@@ -171,6 +175,64 @@ public class BranchAndBound {
             // Schedule the job and update the current instant
             currentTime = scheduleJob(currentTime, j, solution);
         }
+        // Return the result
+        return solution;
+    }
+
+    /**
+     * Compare two jobs considering the release time
+     */
+    class MinProcessingTimeFirst implements Comparator<Integer> {
+
+        @Override
+        public int compare(Integer j1, Integer j2) {
+            return Integer.compare(instance.getJob(j1).getProcessingTime(), instance.getJob(j2).getProcessingTime());
+        }
+    }
+
+
+    /**
+     * Schedule the jobs in the order given by the processing time without preemption
+     * The sum of the completion times is an upper bound for the instance
+     * @return the computed upper bound
+     */
+    private Solution calculateLowerProcessingTimeLowerReleaseTimeFirstSchedule() {
+        // The current instant
+        int currentTime = 0;
+
+        Solution solution = new Solution(instance);
+        // Schedule the jobs
+        PriorityQueue<Integer> sortedJobs = instance.getJobsSortedByReleaseTime();
+        PriorityQueue<Integer> releasedJobs = new PriorityQueue<>(new MinProcessingTimeFirst());
+        do {
+            if (!sortedJobs.isEmpty()) {
+                int jobId = sortedJobs.peek();
+                Job j = instance.getJob(jobId);
+                currentTime = Math.max(j.getReleaseTime(), currentTime);
+            }
+            while (!sortedJobs.isEmpty()) {
+                // Get the job with the lowest release time
+                int jobId = sortedJobs.peek();
+                Job j = instance.getJob(jobId);
+                if (j.getReleaseTime() <= currentTime) {
+                    // Job released
+                    releasedJobs.add(jobId);
+                    sortedJobs.poll();
+                } else {
+                    break;
+                }
+            }
+
+            while (!releasedJobs.isEmpty()) {
+                // Get the job with the lowest release time
+                int jobId = releasedJobs.poll();
+                Job j = instance.getJob(jobId);
+
+                // Schedule the job and update the current instant
+                currentTime = scheduleJob(currentTime, j, solution);
+            }
+        } while(!sortedJobs.isEmpty());
+
         // Return the result
         return solution;
     }

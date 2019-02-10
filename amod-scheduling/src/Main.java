@@ -14,6 +14,7 @@ public class Main {
         // Build dataset from an input file
         Dataset dataset = new Dataset();
         dataset.buildDatasetFromXlsxFile("dataset - Copia\\instances.xlsx");
+        //dataset.buildDatasetFromXlsxFile("dataset - Copia\\test.xlsx");
 
         // Create a new stopwatch
         Stopwatch stopwatch = new Stopwatch();
