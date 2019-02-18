@@ -33,6 +33,8 @@ public class BranchAndBound {
      */
     private Solution bestSolution;
 
+    private int bestLowerBound = 0;
+
     /**
      * Allow to split the computation between several threads
      * in order to reduce the execution time on multi-core processors
@@ -40,9 +42,20 @@ public class BranchAndBound {
     private ExecutorService executor;
 
     /**
+     * Count pruned branches for testing purposes
+     */
+    private int countPruned = 0;
+
+    /**
+     * Count pruned branches for testing purposes
+     */
+    private int countFoundPreemptive = 0;
+
+    /**
      * Initialize a Branch and Bound algorithm
      */
-    public BranchAndBound(Instance i) {
+    public BranchAndBound(Instance i, ExecutorService executor) {
+        this.executor = executor;
         // The instance to be solved
         instance = i;
 
@@ -70,9 +83,7 @@ public class BranchAndBound {
         // Get main thread ID
         mainThreadId = Thread.currentThread().getId();
 
-        // Initialize the executor
-        // Split the computation between several threads
-        executor = Executors.newFixedThreadPool(Runtime.getRuntime().availableProcessors());
+
     }
 
     /**
@@ -249,11 +260,15 @@ public class BranchAndBound {
         int k = 0;
         TreeNode root = new TreeNode(instance, k);
 
+        root.calculateLowerBound();
+        bestLowerBound = root.getLowerBound();
+
         // The root needs to be explored: branch
         branch(root);
 
         // Main thread has completed its work
         // Before termination we have to wait for other threads termination
+        /*
         executor.shutdown();
         boolean isWait = true;
         while (isWait) {
@@ -268,6 +283,10 @@ public class BranchAndBound {
         }
         // All tasks completed, terminate the algorithm
         System.out.println("Finished all threads");
+
+        System.out.printf("Pruned: %d\n", countPruned);
+        System.out.printf("Found preemptive: %d\n\n", countFoundPreemptive);
+        */
     }
 
     /**
@@ -278,6 +297,9 @@ public class BranchAndBound {
      * @param node the node
      */
     private void branch(TreeNode node) {
+        if (Thread.currentThread().isInterrupted()) {
+            return;
+        }
 
         // Priority queue containing the active nodes
         // During the execution we discard the nodes which
@@ -328,6 +350,7 @@ public class BranchAndBound {
                 if (updateSolution(child.getPartialSolution())) {
                     setUpperBound(child.getLowerBound());
                 }
+                countFoundPreemptive++;
                 continue;
             }
 
@@ -337,15 +360,21 @@ public class BranchAndBound {
             // we mark the node as an active node and we'll explore the node in the future
             // Prune those nodes with higher lower bound than the current upper bound
             if (child.getLowerBound() <= getUpperBound()) {
+                /*
+                if (child.getLowerBound() > bestLowerBound) {
+                    bestLowerBound = child.getLowerBound();
+                }
+                */
                 // Check pruning condition
                 boolean prune = false;
                 for (int jobId2 = 1; jobId2 <= node.getPartialSolution().numberOfJobs(); jobId2++) {
                     if (jobId == jobId2)
                         // Skip the job itself
                         continue;
-                    if (!node.getPartialSolution().isScheduled(jobId) &&
+                    if (!node.getPartialSolution().isScheduled(jobId2) &&
                             checkPruningCondition(jobId, jobId2, node.getPartialSolution().makeSpan())) {
                         prune = true;
+                        countPruned++;
                         break;
                     }
                 }
@@ -471,6 +500,24 @@ public class BranchAndBound {
      */
     private synchronized void setBestSolution(Solution bestSolution) {
         this.bestSolution = bestSolution;
+    }
+
+    /**
+     * Get count of pruned
+     */
+    public int getCountPruned() {
+        return countPruned;
+    }
+
+    /**
+     * Get count of found preemptive
+     */
+    public int getCountFoundPreemptive() {
+        return countFoundPreemptive;
+    }
+
+    public int getBestLowerBound() {
+        return bestLowerBound;
     }
 
     /**
