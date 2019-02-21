@@ -16,7 +16,7 @@ public class Main {
         System.out.println("Application started");
 
         if (args == null || args.length != 3) {
-            System.err.println("Usage: ...");
+            System.err.println("Usage: java " + Main.class.getName() + " <num_threads> <dataset_path> <timelimit>");
             System.exit(-1);
         }
 
@@ -31,9 +31,6 @@ public class Main {
         // Build dataset from an input file
         Dataset dataset = new Dataset();
         dataset.buildDatasetFromXlsxFile(datasetPath);
-        //dataset.buildDatasetFromXlsxFile("dataset - Copia\\instances.xlsx");
-        //dataset.buildDatasetFromXlsxFile("C:\\Users\\carmi\\IdeaProjects\\amod-progetto\\ampl\\i - java.xlsx");
-        //dataset.buildDatasetFromXlsxFile("dataset - Copia\\test.xlsx");
 
         // Create a new stopwatch
         Stopwatch stopwatch = new Stopwatch();
@@ -49,9 +46,8 @@ public class Main {
             if (numThreads == 0) {
                 executor = Executors.newFixedThreadPool(Runtime.getRuntime().availableProcessors());
             } else {
-                executor = Executors.newFixedThreadPool(numThreads);;
+                executor = Executors.newFixedThreadPool(numThreads);
             }
-
 
             // Run the branch and bound algorithm on the instance
             BranchAndBound bb = new BranchAndBound(instance, executor);
@@ -70,8 +66,6 @@ public class Main {
                 terminated = executor.awaitTermination(timeout, TimeUnit.SECONDS);
                 if (!terminated) {
                     System.out.println("Interrupted");
-                    System.out.println("Best lower bound");
-                    System.out.println(bb.getBestLowerBound());
                     executor.shutdownNow();
                 }
             } catch (InterruptedException e) {
@@ -86,7 +80,7 @@ public class Main {
             // Get the elapsed time
             String elapsedTime = stopwatch.prettyPrintElapsedTime();
             // Print the results
-            System.out.println("Soluzione del problema");
+            System.out.println("Schedule");
             System.out.println(bb.getBestSolution());
             System.out.println(elapsedTime);
             System.out.println("*************************************************************************************************");

@@ -3,8 +3,6 @@ package branch_and_bound;
 import java.util.*;
 
 import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-import java.util.concurrent.TimeUnit;
 
 public class BranchAndBound {
     /**
@@ -32,8 +30,6 @@ public class BranchAndBound {
      * (which has a lower sum of completion times) is found
      */
     private Solution bestSolution;
-
-    private int bestLowerBound = 0;
 
     /**
      * Allow to split the computation between several threads
@@ -82,8 +78,6 @@ public class BranchAndBound {
 
         // Get main thread ID
         mainThreadId = Thread.currentThread().getId();
-
-
     }
 
     /**
@@ -260,33 +254,8 @@ public class BranchAndBound {
         int k = 0;
         TreeNode root = new TreeNode(instance, k);
 
-        root.calculateLowerBound();
-        bestLowerBound = root.getLowerBound();
-
         // The root needs to be explored: branch
         branch(root);
-
-        // Main thread has completed its work
-        // Before termination we have to wait for other threads termination
-        /*
-        executor.shutdown();
-        boolean isWait = true;
-        while (isWait) {
-            try {
-                isWait = !executor.awaitTermination(30, TimeUnit.MINUTES);
-                if (isWait) {
-                    System.out.println("Awaiting completion of bulk callback threads.");
-                }
-            } catch (InterruptedException e) {
-                System.out.println("Interruped while awaiting completion of callback threads - trying again...");
-            }
-        }
-        // All tasks completed, terminate the algorithm
-        System.out.println("Finished all threads");
-
-        System.out.printf("Pruned: %d\n", countPruned);
-        System.out.printf("Found preemptive: %d\n\n", countFoundPreemptive);
-        */
     }
 
     /**
@@ -315,7 +284,7 @@ public class BranchAndBound {
 
         int startInstant;
         // Mark as active all the promising nodes
-        for (int jobId = 1; jobId <= node.getPartialSolution().numberOfJobs(); jobId++) {
+        for (int jobId = 1; jobId <= instance.getNumberOfJobs(); jobId++) {
             if (node.getPartialSolution().isScheduled(jobId)) {
                 // The job is already scheduled in the partial solution
                 continue;
@@ -360,14 +329,9 @@ public class BranchAndBound {
             // we mark the node as an active node and we'll explore the node in the future
             // Prune those nodes with higher lower bound than the current upper bound
             if (child.getLowerBound() <= getUpperBound()) {
-                /*
-                if (child.getLowerBound() > bestLowerBound) {
-                    bestLowerBound = child.getLowerBound();
-                }
-                */
                 // Check pruning condition
                 boolean prune = false;
-                for (int jobId2 = 1; jobId2 <= node.getPartialSolution().numberOfJobs(); jobId2++) {
+                for (int jobId2 = 1; jobId2 <= instance.getNumberOfJobs(); jobId2++) {
                     if (jobId == jobId2)
                         // Skip the job itself
                         continue;
@@ -514,10 +478,6 @@ public class BranchAndBound {
      */
     public int getCountFoundPreemptive() {
         return countFoundPreemptive;
-    }
-
-    public int getBestLowerBound() {
-        return bestLowerBound;
     }
 
     /**

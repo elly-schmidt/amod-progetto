@@ -116,7 +116,7 @@ public class TreeNode {
 
         // Order not released jobs by increasing release time
         PriorityQueue<Integer> notReleasedJobs = new PriorityQueue<>(instance.getNumberOfJobs()-k, new MinReleaseTimeFirst());
-        for (int jobId = 1; jobId <= getPartialSolution().numberOfJobs(); jobId++) {
+        for (int jobId = 1; jobId <= instance.getNumberOfJobs(); jobId++) {
             if (!getPartialSolution().isScheduled(jobId)) {
                 notReleasedJobs.add(jobId);
             }
